@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>PokéFollower</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 12px; min-width: 220px; }
+    .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    button, select, input[type="checkbox"] { font-size: 14px; }
+    .hint { color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <label for="enabled"><strong>Enable follower</strong></label>
+    <input id="enabled" type="checkbox" />
+  </div>
+  <div class="row">
+    <label for="sprite">Sprite</label>
+    <select id="sprite">
+      <option value="dot">Color Dot (placeholder)</option>
+      <!-- later: <option value="x">Some sprite</option> -->
+    </select>
+  </div>
+  <p class="hint">Settings persist via <code>chrome.storage.sync</code>.</p>
+  <script src="popup.js"></script>
+</body>
+</html>
