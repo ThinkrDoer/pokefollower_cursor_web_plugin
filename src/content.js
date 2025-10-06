@@ -3,6 +3,32 @@ const STATE = { enabled: false, sprite: "dot" };
 let followerEl = null, rafId = null;
 let latestPos = { x: 0, y: 0 };
 
+function updateSpriteAppearance() {
+  if (!followerEl) return;
+
+  if (STATE.sprite === "dot") {
+    Object.assign(followerEl.style, {
+      width: "24px",
+      height: "24px",
+      borderRadius: "50%",
+      background: "radial-gradient(circle, #ffd166 10%, #ef476f 70%)",
+      backgroundImage: "none",
+      backgroundColor: "transparent"
+    });
+  } else {
+    const url = chrome.runtime.getURL(`assets/sprites/${STATE.sprite}`);
+    const sizeMap = { "pikachu.png": 42, "Eevee.webp": 46 };
+    const size = sizeMap[STATE.sprite] || 40;
+
+    Object.assign(followerEl.style, {
+      width: `${size}px`,
+      height: `${size}px`,
+      borderRadius: "0",
+      background: `url(${url}) center / contain no-repeat`,
+      backgroundColor: "transparent"
+    });
+  }
+}
 function createFollower() {
   if (followerEl) return;
   followerEl = document.createElement("div");
@@ -15,6 +41,7 @@ function createFollower() {
     boxShadow: "0 1px 4px rgba(0,0,0,0.3)"
   });
   document.documentElement.appendChild(followerEl);
+  updateSpriteAppearance();
 }
 function removeFollower() {
   if (followerEl?.parentNode) followerEl.parentNode.removeChild(followerEl);
@@ -52,11 +79,12 @@ chrome.storage.sync.get(["vcp1_enabled", "vcp1_sprite"], (res) => {
   STATE.enabled = Boolean(res.vcp1_enabled);
   STATE.sprite = res.vcp1_sprite || "dot";
   applyState();
+  updateSpriteAppearance();
 });
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== "sync") return;
   if (changes.vcp1_enabled) { STATE.enabled = Boolean(changes.vcp1_enabled.newValue); applyState(); }
-  if (changes.vcp1_sprite) { STATE.sprite = changes.vcp1_sprite.newValue || "dot"; /* TODO: swap sprite */ }
+  if (changes.vcp1_sprite) { STATE.sprite = changes.vcp1_sprite.newValue || "dot"; updateSpriteAppearance(); }
 });
 
 window.addEventListener("beforeunload", () => {

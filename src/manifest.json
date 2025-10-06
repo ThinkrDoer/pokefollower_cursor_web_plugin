@@ -1,11 +1,24 @@
 {
   "manifest_version": 3,
   "name": "PokéFollower (VCP1)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A friendly sprite follows your cursor on web pages.",
   "permissions": ["storage"],
-  "action": { "default_title": "PokéFollower", "default_popup": "popup/index.html" },
+  "action": {
+    "default_title": "PokéFollower",
+    "default_popup": "popup/index.html"
+  },
   "content_scripts": [
-    { "matches": ["<all_urls>"], "js": ["content.js"], "run_at": "document_idle" }
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/sprites/*"],
+      "matches": ["<all_urls>"]
+    }
   ]
 }
