@@ -17,6 +17,7 @@ function updateSpriteAppearance() {
     });
   } else {
     const url = chrome.runtime.getURL(`assets/sprites/${STATE.sprite}`);
+    console.log('sprite path check →', STATE.sprite, '→', url);
     const sizeMap = { "pikachu.png": 42, "Eevee.webp": 46 };
     const size = sizeMap[STATE.sprite] || 40;
 
@@ -84,7 +85,11 @@ chrome.storage.sync.get(["vcp1_enabled", "vcp1_sprite"], (res) => {
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== "sync") return;
   if (changes.vcp1_enabled) { STATE.enabled = Boolean(changes.vcp1_enabled.newValue); applyState(); }
-  if (changes.vcp1_sprite) { STATE.sprite = changes.vcp1_sprite.newValue || "dot"; updateSpriteAppearance(); }
+  if (changes.vcp1_sprite) {
+  STATE.sprite = changes.vcp1_sprite.newValue || "dot";
+  console.log('sprite changed to →', STATE.sprite);
+  updateSpriteAppearance();
+}
 });
 
 window.addEventListener("beforeunload", () => {
