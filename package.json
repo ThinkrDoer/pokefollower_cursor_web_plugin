@@ -1,0 +1,13 @@
+{
+  "name": "pokefollower_cursor_web_plugin",
+  "version": "0.1.0",
+  "description": "Chrome plugin that follows your cursor with Pokémon sprites",
+  "type": "module",
+  "scripts": {
+  "parse": "node src/scripts/parse-anim.cjs"
+},
+  "dependencies": {
+    "fast-xml-parser": "^4.4.0",
+    "image-size": "^1.0.2"
+  }
+}

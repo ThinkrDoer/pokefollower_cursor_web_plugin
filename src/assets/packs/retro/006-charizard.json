@@ -1,0 +1,30 @@
+{
+  "name": "006-charizard",
+  "flipX": true,
+  "states": {
+    "idle": {
+      "sheet": "Idle-Anim.webp",
+      "frame": {
+        "w": 40,
+        "h": 48
+      },
+      "fps": 6,
+      "row": 0,
+      "columns": 4,
+      "rows": 8,
+      "frames": 4
+    },
+    "walk": {
+      "sheet": "Walk-Anim.webp",
+      "frame": {
+        "w": 40,
+        "h": 48
+      },
+      "fps": 9,
+      "row": 0,
+      "columns": 4,
+      "rows": 8,
+      "frames": 4
+    }
+  }
+}
