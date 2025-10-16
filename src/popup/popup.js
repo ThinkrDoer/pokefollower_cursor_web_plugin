@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const enabledEl = document.getElementById("enabled");
-  const spriteEl  = document.getElementById("sprite");
+  const packEl    = document.getElementById("pack");
 
   // Load saved settings
-  chrome.storage.sync.get(["vcp1_enabled", "vcp1_sprite"], (res) => {
+  chrome.storage.sync.get(["vcp1_enabled", "vcp1_pack"], (res) => {
     enabledEl.checked = !!res.vcp1_enabled;
-    spriteEl.value = res.vcp1_sprite || "dot";
+    packEl.value = res.vcp1_pack || "retro/009-blastoise";
   });
 
   // Helper: save then close popup (slight delay so Chrome applies update)
@@ -21,10 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
     saveAndClose({ vcp1_enabled: enabledEl.checked });
   });
 
-  // Close on sprite select
-  spriteEl.addEventListener("change", () => {
-    saveAndClose({ vcp1_sprite: spriteEl.value });
-  });
+// Keep popup open on Pokémon select
+packEl.addEventListener("change", () => {
+  chrome.storage.sync.set({ vcp1_pack: packEl.value });
+});
 
   // Quality of life: ESC closes popup
   document.addEventListener("keydown", (e) => {

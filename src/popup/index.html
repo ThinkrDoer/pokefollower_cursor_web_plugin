@@ -17,13 +17,12 @@
     <input id="enabled" type="checkbox" />
   </div>
   <div class="row">
-    <label for="sprite">Sprite</label>
-    <select id="sprite">
-  <option value="dot">Color Dot (placeholder)</option>
-  <option value="pikachu.png">Pikachu</option>
-  <option value="Eevee.webp">Eevee</option>
-</select>
-  </div>
+  <label for="pack">Pokémon</label>
+  <select id="pack">
+    <option value="retro/009-blastoise">Blastoise (#009)</option>
+    <option value="retro/006-charizard">Charizard (#006)</option>
+  </select>
+</div>
   <p class="hint">Settings persist via <code>chrome.storage.sync</code>.</p>
   <script src="popup.js"></script>
 </body>
