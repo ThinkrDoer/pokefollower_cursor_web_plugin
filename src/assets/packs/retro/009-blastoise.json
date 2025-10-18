@@ -1,30 +1,38 @@
 {
   "name": "009-blastoise",
-  "flipX": true,
+  "flipX": false,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
-      "frame": {
-        "w": 40,
-        "h": 40
-      },
+      "frames": 10,
       "fps": 6,
-      "row": 0,
-      "columns": 8,
-      "rows": 8,
-      "frames": 8
+      "frame": { "w": 32, "h": 32 },
+      "rows": {
+        "front": 0,
+        "frontRight": 1,
+        "right": 3,
+        "backRight": 4,
+        "back": 5,
+        "backLeft": 6,
+        "left": 7,
+        "frontLeft": 9
+      }
     },
     "walk": {
       "sheet": "Walk-Anim.webp",
-      "frame": {
-        "w": 32,
-        "h": 40
-      },
-      "fps": 9,
-      "row": 0,
-      "columns": 4,
-      "rows": 8,
-      "frames": 4
+      "frames": 6,
+      "fps": 6,
+      "frame": { "w": 32, "h": 32 },
+      "rows": {
+        "front": 0,
+        "frontRight": 1,
+        "right": 3,
+        "backRight": 4,
+        "back": 5,
+        "backLeft": 6,
+        "left": 7,
+        "frontLeft": 9
+      }
     }
   }
 }
