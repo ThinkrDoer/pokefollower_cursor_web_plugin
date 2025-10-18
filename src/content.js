@@ -11,7 +11,7 @@ let rafId = null;
 const RUNTIME = {
   meta: null,                 // loaded JSON pack
   images: {},                 // { idle: Image, walk: Image }
-  anim: { name: "idle", frame: 0, accMs: 0 },
+  anim: { name: "idle", frame: 0, row: 0, accMs: 0 },
   lastMoveTs: 0,
   lastMouse: { x: 0, y: 0, t: 0 },
 
@@ -44,6 +44,49 @@ function computeTarget() {
 
   RUNTIME.target.x = (RUNTIME.lastMouse?.x || 0) + ox;
   RUNTIME.target.y = (RUNTIME.lastMouse?.y || 0) + oy;
+}
+
+// --- 8-way facing from smoothed velocity (octants) ---
+function pickDir8FromVelocity(vx, vy) {
+  const dead = 0.3; // small deadzone to reduce jitter
+  if (Math.abs(vx) <= dead && Math.abs(vy) <= dead) return "front";
+  // DOM coords: +y is downward => vy>0 means "front"
+  const angle = Math.atan2(vy, vx);                  // -PI..PI, 0 = right
+  const norm  = (angle + 2 * Math.PI) % (2 * Math.PI); // 0..2PI
+  const idx   = Math.floor((norm + Math.PI / 8) / (Math.PI / 4)) % 8;
+  // clockwise from right
+  const keys8 = [
+    "right",      // 0
+    "frontRight", // 1
+    "front",      // 2
+    "frontLeft",  // 3
+    "left",       // 4
+    "backLeft",   // 5
+    "back",       // 6
+    "backRight"   // 7
+  ];
+  return keys8[idx];
+}
+
+// Map that direction to a row index using the pack's rows table for the given state
+function pickRowForState(stateName) {
+  const st = RUNTIME.meta?.states?.[stateName];
+  if (!st) return 0;
+  const rows = st.rows || { front: 0 };
+
+  // Prefer 8-way if present, else fall back to nearest cardinal
+  const dir8 = pickDir8FromVelocity(RUNTIME.velAvg.x, RUNTIME.velAvg.y);
+  if (dir8 in rows) return rows[dir8];
+
+  // Map diagonal to nearest cardinal if diagonal key missing
+  const fallbackMap = {
+    frontRight: "front",
+    frontLeft:  "front",
+    backRight:  "back",
+    backLeft:   "back"
+  };
+  const fallback = fallbackMap[dir8] || dir8; // if already cardinal, keep it
+  return (fallback in rows) ? rows[fallback] : (rows.front ?? 0);
 }
 
 function extUrl(rel) { return chrome.runtime.getURL(rel); }
@@ -104,12 +147,20 @@ function applyFrame() {
   const st = RUNTIME.meta.states[RUNTIME.anim.name];
   const { w, h } = st.frame;
   const frame = RUNTIME.anim.frame % st.frames;
+  const rowIndex = RUNTIME.anim.row || 0;
   const bpx = -(frame * w);
-  const bpy = -(st.row * h);
+  const bpy = -(rowIndex * h);
 
   followerEl.style.width  = `${w}px`;
   followerEl.style.height = `${h}px`;
   followerEl.style.backgroundImage = `url("${sheetUrlFor(RUNTIME.anim.name)}")`;
+  // Keep sheet at natural size so backgroundPosition aligns to frame pixels
+  const img = RUNTIME.images[RUNTIME.anim.name];
+  if (img?.naturalWidth && img?.naturalHeight) {
+    followerEl.style.backgroundSize = `${img.naturalWidth}px ${img.naturalHeight}px`;
+  }
+  followerEl.style.backgroundRepeat = "no-repeat";
+  followerEl.style.imageRendering = "pixelated";
   followerEl.style.backgroundPosition = `${bpx}px ${bpy}px`;
 
   const SCALE_VAL = (typeof SCALE !== "undefined" ? SCALE : 1.25);
@@ -128,8 +179,10 @@ function pickStateBySpeed() {
 
 function tick(dtMs) {
   const desired = pickStateBySpeed();
-  if (desired !== RUNTIME.anim.name) {
-    RUNTIME.anim.name = desired;
+  const nextRow = pickRowForState(desired);
+  if (desired !== RUNTIME.anim.name || nextRow !== RUNTIME.anim.row) {
+    RUNTIME.anim.name  = desired;
+    RUNTIME.anim.row   = nextRow;
     RUNTIME.anim.frame = 0;
     RUNTIME.anim.accMs = 0;
   }
@@ -160,6 +213,8 @@ function tick(dtMs) {
     RUNTIME.anim.frame = (RUNTIME.anim.frame + 1) % st.frames;
   }
 
+  // Keep the row updated continuously for natural facing
+  RUNTIME.anim.row = pickRowForState(RUNTIME.anim.name);
   applyFrame();
 }
 
