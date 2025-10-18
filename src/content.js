@@ -9,13 +9,85 @@ let followerEl = null;
 let rafId = null;
 
 const RUNTIME = {
-  meta: null,           // loaded JSON pack
-  images: {},           // { idle: Image, walk: Image }
-  anim: { name: "idle", frame: 0, accMs: 0 },
+  meta: null,                 // loaded JSON pack
+  images: {},                 // { idle: Image, walk: Image }
+  anim: { name: "idle", frame: 0, row: 0, accMs: 0 },
   lastMoveTs: 0,
   lastMouse: { x: 0, y: 0, t: 0 },
+
+  // position/target and smoothed velocity
+  pos:    { x: 0, y: 0 },
+  target: { x: 0, y: 0 },
+  velAvg: { x: 0, y: 0 },
+  speedAvg: 0,
+
+  // keep legacy field in sync for pickStateBySpeed()
   speedPxPerSec: 0
 };
+// --- follow targeting: trail the cursor when moving; perch above when idle
+function computeTarget() {
+  // If we have motion, offset backwards along the velocity vector.
+  // Otherwise, idle above the cursor.
+  const speed = RUNTIME.speedAvg || 0;
+  const hasDir = speed > (typeof SPEED_IDLE !== "undefined" ? SPEED_IDLE : 40);
+
+  const OFFSET = (typeof OFFSET_PX !== "undefined" ? OFFSET_PX : 30);
+
+  let ox = 0, oy = -OFFSET; // idle: sit above the cursor
+  if (hasDir) {
+    // Use direction *opposite* motion so the sprite "trails" the cursor
+    const nx = RUNTIME.velAvg.x / (speed || 1);
+    const ny = RUNTIME.velAvg.y / (speed || 1);
+    ox = -nx * OFFSET;
+    oy = -ny * OFFSET;
+  }
+
+  RUNTIME.target.x = (RUNTIME.lastMouse?.x || 0) + ox;
+  RUNTIME.target.y = (RUNTIME.lastMouse?.y || 0) + oy;
+}
+
+// --- 8-way facing from smoothed velocity (octants) ---
+function pickDir8FromVelocity(vx, vy) {
+  const dead = 0.3; // small deadzone to reduce jitter
+  if (Math.abs(vx) <= dead && Math.abs(vy) <= dead) return "front";
+  // DOM coords: +y is downward => vy>0 means "front"
+  const angle = Math.atan2(vy, vx);                  // -PI..PI, 0 = right
+  const norm  = (angle + 2 * Math.PI) % (2 * Math.PI); // 0..2PI
+  const idx   = Math.floor((norm + Math.PI / 8) / (Math.PI / 4)) % 8;
+  // clockwise from right
+  const keys8 = [
+    "right",      // 0
+    "frontRight", // 1
+    "front",      // 2
+    "frontLeft",  // 3
+    "left",       // 4
+    "backLeft",   // 5
+    "back",       // 6
+    "backRight"   // 7
+  ];
+  return keys8[idx];
+}
+
+// Map that direction to a row index using the pack's rows table for the given state
+function pickRowForState(stateName) {
+  const st = RUNTIME.meta?.states?.[stateName];
+  if (!st) return 0;
+  const rows = st.rows || { front: 0 };
+
+  // Prefer 8-way if present, else fall back to nearest cardinal
+  const dir8 = pickDir8FromVelocity(RUNTIME.velAvg.x, RUNTIME.velAvg.y);
+  if (dir8 in rows) return rows[dir8];
+
+  // Map diagonal to nearest cardinal if diagonal key missing
+  const fallbackMap = {
+    frontRight: "front",
+    frontLeft:  "front",
+    backRight:  "back",
+    backLeft:   "back"
+  };
+  const fallback = fallbackMap[dir8] || dir8; // if already cardinal, keep it
+  return (fallback in rows) ? rows[fallback] : (rows.front ?? 0);
+}
 
 function extUrl(rel) { return chrome.runtime.getURL(rel); }
 
@@ -75,16 +147,28 @@ function applyFrame() {
   const st = RUNTIME.meta.states[RUNTIME.anim.name];
   const { w, h } = st.frame;
   const frame = RUNTIME.anim.frame % st.frames;
+  const rowIndex = RUNTIME.anim.row || 0;
   const bpx = -(frame * w);
-  const bpy = -(st.row * h);
+  const bpy = -(rowIndex * h);
 
   followerEl.style.width  = `${w}px`;
   followerEl.style.height = `${h}px`;
   followerEl.style.backgroundImage = `url("${sheetUrlFor(RUNTIME.anim.name)}")`;
+  // Keep sheet at natural size so backgroundPosition aligns to frame pixels
+  const img = RUNTIME.images[RUNTIME.anim.name];
+  if (img?.naturalWidth && img?.naturalHeight) {
+    followerEl.style.backgroundSize = `${img.naturalWidth}px ${img.naturalHeight}px`;
+  }
+  followerEl.style.backgroundRepeat = "no-repeat";
+  followerEl.style.imageRendering = "pixelated";
   followerEl.style.backgroundPosition = `${bpx}px ${bpy}px`;
+
+  const SCALE_VAL = (typeof SCALE !== "undefined" ? SCALE : 1.25);
   followerEl.style.transform =
-    `translate(${Math.round(RUNTIME.lastMouse.x)}px, ${Math.round(RUNTIME.lastMouse.y)}px) ` +
-    `${STATE.facingLeft ? "scaleX(-1)" : "scaleX(1)"} translate(-50%, -50%)`;
+    `translate(${Math.round(RUNTIME.pos.x)}px, ${Math.round(RUNTIME.pos.y)}px) ` +
+    `translate(-50%, -50%) ` +
+    `scale(${SCALE_VAL})`;
+  followerEl.style.transformOrigin = "center center";
 }
 
 function pickStateBySpeed() {
@@ -95,11 +179,31 @@ function pickStateBySpeed() {
 
 function tick(dtMs) {
   const desired = pickStateBySpeed();
-  if (desired !== RUNTIME.anim.name) {
-    RUNTIME.anim.name = desired;
+  const nextRow = pickRowForState(desired);
+  if (desired !== RUNTIME.anim.name || nextRow !== RUNTIME.anim.row) {
+    RUNTIME.anim.name  = desired;
+    RUNTIME.anim.row   = nextRow;
     RUNTIME.anim.frame = 0;
     RUNTIME.anim.accMs = 0;
   }
+
+  // follow feel: compute target and ease toward it
+  computeTarget();
+  const dx = RUNTIME.target.x - RUNTIME.pos.x;
+  const dy = RUNTIME.target.y - RUNTIME.pos.y;
+
+  const LERP = (typeof LERP_ALPHA !== "undefined" ? LERP_ALPHA : 0.2);
+  const MAX_STEP = (typeof MAX_STEP_PX !== "undefined" ? MAX_STEP_PX : 60);
+
+  let stepX = dx * LERP;
+  let stepY = dy * LERP;
+  const stepMag = Math.hypot(stepX, stepY);
+  if (stepMag > MAX_STEP) {
+    const s = MAX_STEP / (stepMag || 1);
+    stepX *= s; stepY *= s;
+  }
+  RUNTIME.pos.x += stepX;
+  RUNTIME.pos.y += stepY;
 
   const st = RUNTIME.meta.states[RUNTIME.anim.name];
   const msPerFrame = 1000 / st.fps;
@@ -109,6 +213,8 @@ function tick(dtMs) {
     RUNTIME.anim.frame = (RUNTIME.anim.frame + 1) % st.frames;
   }
 
+  // Keep the row updated continuously for natural facing
+  RUNTIME.anim.row = pickRowForState(RUNTIME.anim.name);
   applyFrame();
 }
 
@@ -125,20 +231,34 @@ function loop() {
 }
 
 function onMouseMove(e) {
-  const t  = performance.now();
-  const dt = Math.max(1, t - (RUNTIME.lastMouse.t || t));
-  const dx = e.clientX - (RUNTIME.lastMouse.x || e.clientX);
-  const dy = e.clientY - (RUNTIME.lastMouse.y || e.clientY);
-  const dist = Math.hypot(dx, dy);
-  RUNTIME.speedPxPerSec = (dist / dt) * 1000;
+  const now = performance.now();
 
-  STATE.facingLeft = dx < 0;
-  RUNTIME.lastMouse = { x: e.clientX, y: e.clientY, t };
-  RUNTIME.lastMoveTs = t;
+  // update last mouse and velocity estimate
+  const dt = Math.max(1, now - (RUNTIME.lastMouse.t || now)); // ms
+  const vx = (e.clientX - RUNTIME.lastMouse.x) * (1000 / dt); // px/s
+  const vy = (e.clientY - RUNTIME.lastMouse.y) * (1000 / dt); // px/s
+
+  // simple smoothing for direction and speed
+  const SMOOTH = 0.2;
+  RUNTIME.velAvg.x = RUNTIME.velAvg.x * (1 - SMOOTH) + vx * SMOOTH;
+  RUNTIME.velAvg.y = RUNTIME.velAvg.y * (1 - SMOOTH) + vy * SMOOTH;
+  RUNTIME.speedAvg = Math.hypot(RUNTIME.velAvg.x, RUNTIME.velAvg.y);
+  RUNTIME.speedPxPerSec = RUNTIME.speedAvg;
+
+  RUNTIME.lastMouse.x = e.clientX;
+  RUNTIME.lastMouse.y = e.clientY;
+  RUNTIME.lastMouse.t = now;
+  RUNTIME.lastMoveTs = now;
 }
 
 function start() {
   createFollower();
+  // initialize position/target around current mouse (in case no movement yet)
+  RUNTIME.pos.x = RUNTIME.lastMouse.x;
+  RUNTIME.pos.y = RUNTIME.lastMouse.y;
+  RUNTIME.target.x = RUNTIME.lastMouse.x;
+  RUNTIME.target.y = RUNTIME.lastMouse.y;
+
   window.addEventListener("mousemove", onMouseMove, { passive: true });
   loop();
 }
