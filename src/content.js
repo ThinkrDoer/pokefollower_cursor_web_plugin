@@ -24,6 +24,45 @@ const RUNTIME = {
   // keep legacy field in sync for pickStateBySpeed()
   speedPxPerSec: 0
 };
+// --- UI-configurable tuning (persisted in chrome.storage.sync) ---
+const CONFIG = {
+  scale: 1.25,   // visual scale multiplier
+  offset: 30,    // px distance from cursor (trail/perch)
+  lerp: 0.20     // follow smoothing (0..1), lower = floatier
+};
+function applyConfigPatch(obj = {}) {
+  if (typeof obj.vcp1_scale  === "number" && !Number.isNaN(obj.vcp1_scale))  CONFIG.scale  = obj.vcp1_scale;
+  if (typeof obj.vcp1_offset === "number" && !Number.isNaN(obj.vcp1_offset)) CONFIG.offset = obj.vcp1_offset;
+  if (typeof obj.vcp1_lerp   === "number" && !Number.isNaN(obj.vcp1_lerp))   CONFIG.lerp   = obj.vcp1_lerp;
+}
+
+// --- Live poller for smooth slider updates during popup drag ---
+let LIVE = { dragging: false, pollId: null };
+
+function startLocalPoll() {
+  if (LIVE.pollId) return; // already polling
+  // Poll at ~30Hz to decouple rendering from popup focus/message cadence
+  LIVE.pollId = setInterval(() => {
+    chrome.storage.local.get(["vcp1_scale","vcp1_offset","vcp1_lerp"], (res) => {
+      // Only apply present numeric values
+      const patch = {};
+      if (typeof res.vcp1_scale  === "number")  patch.vcp1_scale  = res.vcp1_scale;
+      if (typeof res.vcp1_offset === "number")  patch.vcp1_offset = res.vcp1_offset;
+      if (typeof res.vcp1_lerp   === "number")  patch.vcp1_lerp   = res.vcp1_lerp;
+      if (Object.keys(patch).length) {
+        applyConfigPatch(patch);
+        if (followerEl && RUNTIME.meta) applyFrame();
+      }
+    });
+  }, 33); // ~30fps
+}
+
+function stopLocalPoll() {
+  if (LIVE.pollId) {
+    clearInterval(LIVE.pollId);
+    LIVE.pollId = null;
+  }
+}
 // --- follow targeting: trail the cursor when moving; perch above when idle
 function computeTarget() {
   // If we have motion, offset backwards along the velocity vector.
@@ -31,7 +70,7 @@ function computeTarget() {
   const speed = RUNTIME.speedAvg || 0;
   const hasDir = speed > (typeof SPEED_IDLE !== "undefined" ? SPEED_IDLE : 40);
 
-  const OFFSET = (typeof OFFSET_PX !== "undefined" ? OFFSET_PX : 30);
+  const OFFSET = CONFIG.offset;
 
   let ox = 0, oy = -OFFSET; // idle: sit above the cursor
   if (hasDir) {
@@ -105,7 +144,8 @@ function createFollower() {
     zIndex: "2147483647",
     willChange: "transform, background-position, background-image",
     backgroundRepeat: "no-repeat",
-    imageRendering: "pixelated" // crisp for retro sheets
+    imageRendering: "pixelated", // crisp for retro sheets
+    transition: "transform 120ms linear, width 120ms linear, height 120ms linear"
   });
   document.documentElement.appendChild(followerEl);
 }
@@ -163,7 +203,7 @@ function applyFrame() {
   followerEl.style.imageRendering = "pixelated";
   followerEl.style.backgroundPosition = `${bpx}px ${bpy}px`;
 
-  const SCALE_VAL = (typeof SCALE !== "undefined" ? SCALE : 1.25);
+  const SCALE_VAL = CONFIG.scale;
   followerEl.style.transform =
     `translate(${Math.round(RUNTIME.pos.x)}px, ${Math.round(RUNTIME.pos.y)}px) ` +
     `translate(-50%, -50%) ` +
@@ -192,7 +232,7 @@ function tick(dtMs) {
   const dx = RUNTIME.target.x - RUNTIME.pos.x;
   const dy = RUNTIME.target.y - RUNTIME.pos.y;
 
-  const LERP = (typeof LERP_ALPHA !== "undefined" ? LERP_ALPHA : 0.2);
+  const LERP = CONFIG.lerp;
   const MAX_STEP = (typeof MAX_STEP_PX !== "undefined" ? MAX_STEP_PX : 60);
 
   let stepX = dx * LERP;
@@ -281,12 +321,16 @@ function applyState() {
 }
 
 // boot
-chrome.storage.sync.get(["vcp1_enabled", "vcp1_pack"], async (res) => {
-  STATE.enabled = !!res.vcp1_enabled;
-  STATE.pack    = res.vcp1_pack || "retro/009-blastoise";
-  try { await loadPack(STATE.pack); } catch (e) { console.warn("pack load failed", e); }
-  applyState();
-});
+chrome.storage.sync.get(
+  ["vcp1_enabled", "vcp1_pack", "vcp1_scale", "vcp1_offset", "vcp1_lerp"],
+  async (res) => {
+    STATE.enabled = !!res.vcp1_enabled;
+    STATE.pack    = res.vcp1_pack || "retro/009-blastoise";
+    applyConfigPatch(res);
+    try { await loadPack(STATE.pack); } catch (e) { console.warn("pack load failed", e); }
+    applyState();
+  }
+);
 
 // react to popup changes
 chrome.storage.onChanged.addListener(async (changes, area) => {
@@ -299,6 +343,37 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
     STATE.pack = changes.vcp1_pack.newValue || "retro/009-blastoise";
     try { await loadPack(STATE.pack); } catch (e) { console.warn("pack switch failed", e); }
   }
+  if (changes.vcp1_scale || changes.vcp1_offset || changes.vcp1_lerp) {
+    const patch = {
+      vcp1_scale:  changes.vcp1_scale  ? Number(changes.vcp1_scale.newValue)  : undefined,
+      vcp1_offset: changes.vcp1_offset ? Number(changes.vcp1_offset.newValue) : undefined,
+      vcp1_lerp:   changes.vcp1_lerp   ? Number(changes.vcp1_lerp.newValue)   : undefined,
+    };
+    applyConfigPatch(patch);
+    // no restart needed; next frame uses updated CONFIG
+  }
 });
 
-window.addEventListener("beforeunload", () => stop());
+// listen for live slider updates and drag state from popup.js
+chrome.runtime.onMessage.addListener((msg) => {
+  if (!msg) return;
+
+  if (msg.type === "vcp1_config" && msg.patch) {
+    applyConfigPatch(msg.patch);
+    if (followerEl && RUNTIME.meta) applyFrame();
+    return;
+  }
+
+  if (msg.type === "vcp1_drag") {
+    const on = !!msg.dragging;
+    if (on && !LIVE.dragging) {
+      LIVE.dragging = true;
+      startLocalPoll();
+    } else if (!on && LIVE.dragging) {
+      LIVE.dragging = false;
+      stopLocalPoll();
+    }
+  }
+});
+
+window.addEventListener("beforeunload", () => { stopLocalPoll(); stop(); });
