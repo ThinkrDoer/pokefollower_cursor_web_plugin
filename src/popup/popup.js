@@ -1,155 +1,148 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const enabledEl = document.getElementById("enabled");
-  const packEl    = document.getElementById("pack");
+/* src/popup/popup.js */
+import { getLocal, setLocal, pushConfig } from "../common.js";
 
-  // Sliders + readouts
-  const scaleEl   = document.getElementById("scale");
-  const offsetEl  = document.getElementById("offset");
-  const lerpEl    = document.getElementById("lerp");
+// Elements
+const enabledEl = document.getElementById("enabled");
+const packEl = document.getElementById("pack");
+const previewSpriteEl = document.getElementById("previewSprite");
 
-  const scaleVal  = document.getElementById("scaleVal");
-  const offsetVal = document.getElementById("offsetVal");
-  const lerpVal   = document.getElementById("lerpVal");
+const scaleEl = document.getElementById("scale");
+const offsetEl = document.getElementById("offset");
+const lerpEl = document.getElementById("lerp");
 
-  // Defaults align with current content.js constants
-  const DEFAULTS = {
-    vcp1_scale: 1.25,   // SCALE
-    vcp1_offset: 30,    // OFFSET_PX
-    vcp1_lerp: 0.20     // LERP_ALPHA (lower = floatier/slower follow)
+// Helper: clamp a numeric string to an input's min/max
+const asNum = (v) => Number(v);
+const clampToInput = (input, raw) => {
+  const min = Number(input.min);
+  const max = Number(input.max);
+  let v = Number(raw);
+  if (!Number.isFinite(v)) v = Number(input.value) || min || 0;
+  if (Number.isFinite(min) && v < min) v = min;
+  if (Number.isFinite(max) && v > max) v = max;
+  return v;
+};
+
+// Small throttle to avoid spamming storage
+const throttle = (fn, ms = 60) => {
+  let t = 0, lastArgs = null, pending = false;
+  return (...args) => {
+    const now = performance.now();
+    lastArgs = args;
+    if (!pending && now - t >= ms) {
+      t = now;
+      fn(...lastArgs);
+    } else if (!pending) {
+      pending = true;
+      setTimeout(() => {
+        pending = false;
+        t = performance.now();
+        fn(...lastArgs);
+      }, ms);
+    }
   };
+};
 
-  // --- Hot-path local writes + dragging signal for smooth live updates ---
-  const setLocal = (patch) => chrome.storage.local.set(patch);
-  // let dragging = false;
-  // function setDragging(on) {
-  //   if (dragging === on) return;
-  //   dragging = on;
-  //   try { chrome.runtime.sendMessage({ type: "vcp1_drag", dragging }); } catch (_) {}
-  // }
+// Live UI preview (no storage writes)
+function updatePreviewCard() {
+  // Size preview roughly by scale (keep it simple: 42px base * scale * 2)
+  const scale = Number(scaleEl.value) || 1;
+  const px = Math.round(42 * scale * 2);
+  previewSpriteEl.style.width = px + "px";
+  previewSpriteEl.style.height = px + "px";
+}
 
-  // Debounced persist + live-apply to content scripts
-  let pending = {};
-  let saveTimer = null;
+// Commit settings -> storage -> content script
+const commitConfigThrottled = throttle((cfg) => pushConfig(cfg), 80);
 
-  function pushConfig(patch, { flush = false } = {}) {
-    // 1) Live-apply immediately in active tabs without hitting sync limits
-    try { chrome.runtime.sendMessage({ type: "vcp1_config", patch }); } catch (_) {}
+function commitAll(from) {
+  const scale = clampToInput(scaleEl, scaleEl.value);
+  const offset = clampToInput(offsetEl, offsetEl.value);
+  const lerp = clampToInput(lerpEl, lerpEl.value);
 
-    // 2) Batch+debounce writes to chrome.storage.sync to avoid rate limiting
-    Object.assign(pending, patch);
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-      const toSave = { ...pending };
-      pending = {};
-      chrome.storage.sync.set(toSave, () => {});
-    }, 250);
+  // normalize inputs to their canonical strings
+  scaleEl.value = scale.toFixed(2);
+  offsetEl.value = String(offset);
+  lerpEl.value = lerp.toFixed(2);
 
-    if (flush) {
-      clearTimeout(saveTimer);
-      if (Object.keys(pending).length) {
-        const toSaveNow = { ...pending };
-        pending = {};
-        chrome.storage.sync.set(toSaveNow, () => {});
-      }
-    }
-  }
+  // Preview update
+  updatePreviewCard();
 
-  const asNum = (v) => Number(v);
+  // Persist + notify content
+  setLocal({
+    vcp1_scale: scale,
+    vcp1_offset: offset,
+    vcp1_lerp: lerp,
+  });
+  commitConfigThrottled({
+    vcp1_scale: scale,
+    vcp1_offset: offset,
+    vcp1_lerp: lerp,
+  });
+}
 
-  // Load saved settings
-  chrome.storage.sync.get(
-    ["vcp1_enabled", "vcp1_pack", "vcp1_scale", "vcp1_offset", "vcp1_lerp"],
-    (res) => {
-      enabledEl.checked = !!res.vcp1_enabled;
-      packEl.value      = res.vcp1_pack || "retro/009-blastoise";
+// Init
+(async function main() {
+  const cfg = await getLocal();
 
-      const scale  = (typeof res.vcp1_scale  === "number") ? res.vcp1_scale  : DEFAULTS.vcp1_scale;
-      const offset = (typeof res.vcp1_offset === "number") ? res.vcp1_offset : DEFAULTS.vcp1_offset;
-      const lerp   = (typeof res.vcp1_lerp   === "number") ? res.vcp1_lerp   : DEFAULTS.vcp1_lerp;
-
-      scaleEl.value  = String(scale);
-      offsetEl.value = String(offset);
-      lerpEl.value   = String(lerp);
-
-      scaleVal.textContent  = scale.toFixed(2) + "×";
-      offsetVal.textContent = offset + " px";
-      lerpVal.textContent   = lerp.toFixed(2);
-    }
-  );
-
-  // Helper: save but do NOT auto-close (except when toggling enable)
-  const save = (obj) => chrome.storage.sync.set(obj);
-
-  // Toggle enable — close popup (people expect immediate feedback here)
+  // Enabled
+  enabledEl.checked = !!cfg.vcp1_enabled;
   enabledEl.addEventListener("change", () => {
-    save({ vcp1_enabled: enabledEl.checked });
-    window.close();
+    setLocal({ vcp1_enabled: enabledEl.checked });
+    pushConfig({ vcp1_enabled: enabledEl.checked });
   });
 
-  // Pack select — save but keep popup open
+  // Pack select
+  if (cfg.vcp1_pack) {
+    const idx = Array.from(packEl.options).findIndex(o => o.value === cfg.vcp1_pack);
+    if (idx >= 0) packEl.selectedIndex = idx;
+  }
   packEl.addEventListener("change", () => {
-    save({ vcp1_pack: packEl.value });
+    const val = packEl.value;
+    setLocal({ vcp1_pack: val });
+    // Update the preview PNG (static UI sprite)
+    previewSpriteEl.src = `../assets/ui/${val.endsWith("blastoise") ? "blastoise" : "blastoise"}.png`;
+    // notify content
+    pushConfig({ vcp1_pack: val });
   });
 
-  // function clampFrom helper
-  function clampFrom(el) {
-    const v = Number(el.value);
-    const min = Number(el.min);
-    const max = Number(el.max);
-    if (Number.isFinite(min) && v < min) return min;
-    if (Number.isFinite(max) && v > max) return max;
-    return v;
-  }
+  // Numbers: load with sane defaults
+  scaleEl.value  = Number.isFinite(cfg.vcp1_scale)  ? Number(cfg.vcp1_scale).toFixed(2) : "1.00";
+  offsetEl.value = Number.isFinite(cfg.vcp1_offset) ? String(cfg.vcp1_offset) : "24";
+  lerpEl.value   = Number.isFinite(cfg.vcp1_lerp)   ? Number(cfg.vcp1_lerp).toFixed(2) : "0.15";
 
-  // Scale
-  function onScaleInput() {
-    const v = clampFrom(scaleEl);
-    scaleEl.value = String(v);
-    scaleVal.textContent = v.toFixed(2) + "×";
-    setLocal({ vcp1_scale: v });
-    pushConfig({ vcp1_scale: v });
-  }
-  scaleEl.addEventListener("input", onScaleInput);
-  scaleEl.addEventListener("change", () => {
-    const v = clampFrom(scaleEl);
-    pushConfig({ vcp1_scale: v }, { flush: true });
+  updatePreviewCard();
+
+  // Live feedback while typing (no clamping yet)
+  const onInput = () => updatePreviewCard();
+  scaleEl.addEventListener("input", onInput);
+  offsetEl.addEventListener("input", onInput);
+  lerpEl.addEventListener("input", onInput);
+
+  // Commit on blur or Enter (clamps, persists, pushes)
+  const onCommit = (e) => commitAll("blur");
+  const onEnterCommit = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commitAll("enter");
+      e.currentTarget.blur(); // feels snappier
+    }
+  };
+  [scaleEl, offsetEl, lerpEl].forEach((el) => {
+    el.addEventListener("blur", onCommit);
+    el.addEventListener("keydown", onEnterCommit);
   });
 
-  // Offset
-  function onOffsetInput() {
-    const v = clampFrom(offsetEl);
-    offsetEl.value = String(v);
-    offsetVal.textContent = v + " px";
-    setLocal({ vcp1_offset: v });
-    pushConfig({ vcp1_offset: v });
-  }
-  offsetEl.addEventListener("input", onOffsetInput);
-  offsetEl.addEventListener("change", () => {
-    const v = clampFrom(offsetEl);
-    pushConfig({ vcp1_offset: v }, { flush: true });
+  // Nudge buttons ▲ ▼
+  document.querySelectorAll(".nudge").forEach(btn => {
+    const which = btn.getAttribute("data-step"); // scale | offset | lerp
+    const dir = btn.getAttribute("data-dir");    // up | down
+    const target = which === "scale" ? scaleEl : which === "offset" ? offsetEl : lerpEl;
+    btn.addEventListener("click", () => {
+      const step = Number(target.step) || 1;
+      const cur = Number(target.value) || 0;
+      const next = dir === "up" ? cur + step : cur - step;
+      target.value = String(next);
+      commitAll("nudge");
+    });
   });
-
-  // Lerp
-  function onLerpInput() {
-    const v = clampFrom(lerpEl);
-    lerpEl.value = String(v);
-    lerpVal.textContent = v.toFixed(2);
-    setLocal({ vcp1_lerp: v });
-    pushConfig({ vcp1_lerp: v });
-  }
-  lerpEl.addEventListener("input", onLerpInput);
-  lerpEl.addEventListener("change", () => {
-    const v = clampFrom(lerpEl);
-    pushConfig({ vcp1_lerp: v }, { flush: true });
-  });
-
-  // Removed dragging pointer event listeners for sliders since number inputs do not need them
-
-  // Safety: end dragging if mouse released outside
-  // document.addEventListener("pointerup", () => setDragging(false));
-
-  // ESC to close (QoL)
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") window.close();
-  });
-});
+})();
