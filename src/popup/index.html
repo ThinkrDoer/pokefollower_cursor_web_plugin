@@ -83,7 +83,7 @@
     /* switch knob (mini Pokéball) */
     #enabled::after {
       content: "";
-      position: absolute; top: 50%; left: 2px; transform: translateY(-50%);
+      position: absolute; top: 50%; left: -4px; transform: translateY(-50%);
       width: 18px; height: 18px; border-radius: 50%;
       border: 2px solid #000; background: linear-gradient(to bottom, #EF4036 50%, #fff 50%);
     }
@@ -117,10 +117,10 @@
     }
     .picker .glass {
       width: 12px; height: 12px; border: 2px solid #000; border-radius: 50%;
-      position: relative; margin-top: -1px;
+      position: relative; margin-top: 0px;
     }
     .picker .glass::after {
-      content: ""; position: absolute; width: 7px; border-top: 2px solid #000; transform: rotate(45deg); right: -3px; bottom: -2px;
+      content: ""; position: absolute; width: 7px; border-top: 2px solid #000; transform: rotate(45deg); right: -5px; bottom: -2px;
     }
     #pack {
       appearance: none; border: 0; padding: 0; margin: 0; width: 100%;
@@ -129,7 +129,7 @@
     }
 
     /* Controls layout: three columns */
-    .triples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center; margin-top: 6px; }
+    .triples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center; margin-top: 6px; }
     .triple h4 { font-size: 12px; letter-spacing: .02em; margin: 8px 0 8px; font-weight: 800; }
 
     /* Row: vertical arrows + underline input */
@@ -141,7 +141,7 @@
 
     .inputWrap { display: inline-flex; align-items: flex-start; gap: 6px; margin-top: -1px; }
     .inputWrap input[type="number"] {
-      width: 56px; text-align: center; border: 0; border-bottom: 2px solid #000; outline: none;
+      width: 28px; text-align: center; border: 0; border-bottom: 2px solid #000; outline: none;
       font-size: 14px; font-weight: 600; padding: 2px 0 0; background: transparent;
     }
     .inputWrap .suffix { font-weight: 700; display: inline-block; margin-top: 7px; }
@@ -233,8 +233,8 @@
             <div class="caret down"></div>
           </div>
           <div class="inputWrap">
-            <input id="lerp" type="number" min="0.05" max="0.50" step="0.01" inputmode="decimal" />
-            <span class="suffix">x</span>
+            <input id="lerp" type="number" min="0.5" max="5.0" step="0.1" inputmode="decimal" />
+            <span class="suffix">spd</span>
           </div>
         </div>
         <span id="lerpVal" class="sr-only" aria-live="polite"></span>

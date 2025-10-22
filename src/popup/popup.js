@@ -69,11 +69,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       scaleEl.value  = String(scale);
       offsetEl.value = String(offset);
-      lerpEl.value   = String(lerp);
+
+      // UI shows speed as 0.5–5.0 (×10 of internal lerp 0.05–0.50)
+      const lerpUI = lerp * 10;
+      lerpEl.value = String(lerpUI.toFixed(1));
 
       scaleVal.textContent  = scale.toFixed(2) + "×";
       offsetVal.textContent = offset + " px";
-      lerpVal.textContent   = lerp.toFixed(2);
+      lerpVal.textContent   = lerpUI.toFixed(1);
     }
   );
 
@@ -131,22 +134,104 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Lerp
   function onLerpInput() {
-    const v = clampFrom(lerpEl);
-    lerpEl.value = String(v);
-    lerpVal.textContent = v.toFixed(2);
-    setLocal({ vcp1_lerp: v });
-    pushConfig({ vcp1_lerp: v });
+    const ui = clampFrom(lerpEl);           // UI 0.5–5.0
+    const uiFixed = Number(ui.toFixed(1));
+    lerpEl.value = String(uiFixed);
+    lerpVal.textContent = uiFixed.toFixed(1);
+    const lerp = uiFixed / 10;              // internal 0.05–0.50
+    setLocal({ vcp1_lerp: lerp });
+    pushConfig({ vcp1_lerp: lerp });
   }
   lerpEl.addEventListener("input", onLerpInput);
   lerpEl.addEventListener("change", () => {
-    const v = clampFrom(lerpEl);
-    pushConfig({ vcp1_lerp: v }, { flush: true });
+    const ui = clampFrom(lerpEl);
+    pushConfig({ vcp1_lerp: ui / 10 }, { flush: true });
   });
 
   // Removed dragging pointer event listeners for sliders since number inputs do not need them
 
   // Safety: end dragging if mouse released outside
   // document.addEventListener("pointerup", () => setDragging(false));
+
+  // ===== TRIANGLES (▲/▼) — JS-only wiring, no HTML changes required =====
+
+  // Find the number input associated with a triangle within the same .triple block
+  function inputForTriangle(el) {
+    const triple = el.closest(".triple");
+    if (!triple) return null;
+    // Prefer an explicit number input inside the triple
+    return triple.querySelector('input[type="number"]');
+  }
+
+  // Use native stepUp/stepDown so min/max/step are respected
+  function nudgeInput(input, dir /* 'up' | 'down' */) {
+    if (!input) return;
+    if (dir === "down") input.stepDown();
+    else input.stepUp();
+    // Live update and persist via existing handlers
+    input.dispatchEvent(new Event("input",  { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  // Press-and-hold repeat
+  let holdT = null, rptT = null, holdInput = null, holdDir = "up";
+
+  function stopHold() {
+    if (holdT) { clearTimeout(holdT); holdT = null; }
+    if (rptT)  { clearInterval(rptT); rptT = null; }
+    holdInput = null;
+  }
+
+  document.addEventListener("mousedown", (e) => {
+    const caret = e.target.closest(".arrowStack .caret");
+    if (!caret) return;
+
+    const input = inputForTriangle(caret);
+    if (!input) return;
+
+    holdInput = input;
+    holdDir = caret.classList.contains("down") ? "down" : "up";
+
+    // First tick immediately
+    nudgeInput(holdInput, holdDir);
+
+    // Then start repeating
+    stopHold();
+    holdT = setTimeout(() => {
+      rptT = setInterval(() => nudgeInput(holdInput, holdDir), 90);
+    }, 250);
+  }, true);
+
+  // Keyboard support for triangles: Space/Enter nudges once
+  document.addEventListener("keydown", (e) => {
+    const caret = e.target.closest(".arrowStack .caret");
+    if (!caret) return;
+    if (e.key !== " " && e.key !== "Enter") return;
+    e.preventDefault();
+    const input = inputForTriangle(caret);
+    const dir = caret.classList.contains("down") ? "down" : "up";
+    nudgeInput(input, dir);
+  }, true);
+
+  window.addEventListener("mouseup", stopHold, true);
+  window.addEventListener("mouseleave", stopHold, true);
+  window.addEventListener("blur", stopHold, true);
+
+  // ===== CHEVRONS (◀/▶) — cycle the <select id="pack"> and trigger existing change flow =====
+  document.addEventListener("click", (e) => {
+    const left  = e.target.closest(".preview .chev.left");
+    const right = e.target.closest(".preview .chev.right");
+    if (!left && !right) return;
+
+    const dir = right ? +1 : -1;
+    const total = packEl.options.length;
+    let idx = packEl.selectedIndex;
+    if (idx < 0) idx = 0;
+    idx = (idx + dir + total) % total;
+
+    packEl.selectedIndex = idx;
+    packEl.dispatchEvent(new Event("change", { bubbles: true }));
+  });
 
   // ESC to close (QoL)
   document.addEventListener("keydown", (e) => {
