@@ -164,9 +164,9 @@ function packSlug() {
 }
 
 function sheetUrlFor(stateName) {
-  const st = RUNTIME.meta.states[stateName];
-  const sheetFilename = st.sheet;                 // e.g. "Walk-Anim.webp"
-  const rawFolder = `assets/raw/${packSlug()}/`;  // assets/raw/009-blastoise/
+  const st = RUNTIME.meta && RUNTIME.meta.states ? RUNTIME.meta.states[stateName] : null;
+  const sheetFilename = st && st.sheet ? st.sheet : "";
+  const rawFolder = `assets/raw/${packSlug()}/`;
   return extUrl(rawFolder + sheetFilename);
 }
 
@@ -182,9 +182,17 @@ function ensureImagesLoaded(meta) {
   });
   return Promise.all(tasks);
 }
+function resetAnimationForNewPack() {
+  // Start from idle; row will be resolved in tick() via pickRowForState
+  RUNTIME.anim = { name: "idle", frame: 0, row: 0, accMs: 0 };
+}
 
 function applyFrame() {
-  const st = RUNTIME.meta.states[RUNTIME.anim.name];
+  const st = RUNTIME.meta && RUNTIME.meta.states && RUNTIME.meta.states[RUNTIME.anim.name];
+  if (!st || !st.frame || typeof st.frames !== "number" || !Number.isFinite(st.frames)) {
+    // Defensive: if pack schema is missing or wrong, skip this frame rather than crash
+    return;
+  }
   const { w, h } = st.frame;
   const frame = RUNTIME.anim.frame % st.frames;
   const rowIndex = RUNTIME.anim.row || 0;
@@ -254,7 +262,9 @@ function tick(dtMs) {
   }
 
   // Keep the row updated continuously for natural facing
-  RUNTIME.anim.row = pickRowForState(RUNTIME.anim.name);
+  if (RUNTIME.meta && RUNTIME.meta.states) {
+    RUNTIME.anim.row = pickRowForState(RUNTIME.anim.name);
+  }
   applyFrame();
 }
 
@@ -309,11 +319,24 @@ function stop() {
 }
 
 async function loadPack(packKey) {
-  // JSON at assets/packs/retro/009-blastoise.json
   const jsonPath = `assets/packs/${packKey}.json`;
-  const meta = await fetch(extUrl(jsonPath)).then(r => r.json());
+  const meta = await fetch(extUrl(jsonPath)).then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status} for ${jsonPath}`);
+    return r.json();
+  });
+  // Minimal schema checks
+  if (!meta || !meta.states || !meta.states.idle || !meta.states.walk) {
+    throw new Error("Pack schema invalid: missing states.idle or states.walk");
+  }
   RUNTIME.meta = meta;
+  // reset animation state for the new pack
+  resetAnimationForNewPack();
   await ensureImagesLoaded(meta);
+  // Restart animation loop if switching packs
+  if (rafId) cancelAnimationFrame(rafId);
+  if (followerEl) removeFollower();
+  createFollower();
+  loop();
 }
 
 function applyState() {
@@ -327,7 +350,13 @@ chrome.storage.sync.get(
     STATE.enabled = !!res.vcp1_enabled;
     STATE.pack    = res.vcp1_pack || "retro/009-blastoise";
     applyConfigPatch(res);
-    try { await loadPack(STATE.pack); } catch (e) { console.warn("pack load failed", e); }
+    try {
+      await loadPack(STATE.pack);
+    } catch (e) {
+      console.warn("pack load failed; reverting to default", e);
+      STATE.pack = "retro/009-blastoise";
+      try { await loadPack(STATE.pack); } catch (e2) { console.warn("default pack also failed", e2); }
+    }
     applyState();
   }
 );
@@ -340,8 +369,18 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
     applyState();
   }
   if (changes.vcp1_pack) {
+    const prev = STATE.pack;
     STATE.pack = changes.vcp1_pack.newValue || "retro/009-blastoise";
-    try { await loadPack(STATE.pack); } catch (e) { console.warn("pack switch failed", e); }
+    try {
+      await loadPack(STATE.pack);
+      // If follower exists, immediately apply a frame from the new sheet
+      if (followerEl) applyFrame();
+    } catch (e) {
+      console.warn("pack switch failed; restoring previous pack", e);
+      STATE.pack = prev;
+      try { await loadPack(STATE.pack); } catch (e2) { console.warn("restore previous pack failed", e2); }
+      if (followerEl) applyFrame();
+    }
   }
   if (changes.vcp1_scale || changes.vcp1_offset || changes.vcp1_lerp) {
     const patch = {

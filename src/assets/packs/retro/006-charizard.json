@@ -8,11 +8,18 @@
         "w": 40,
         "h": 48
       },
-      "fps": 6,
-      "row": 0,
-      "columns": 4,
-      "rows": 8,
-      "frames": 4
+      "fps": 4,
+      "frames": 4,
+      "rows": {
+        "front": 0,
+        "right": 2,
+        "back": 4,
+        "left": 6,
+        "frontRight": 1,
+        "backRight": 3,
+        "backLeft": 5,
+        "frontLeft": 7
+      }
     },
     "walk": {
       "sheet": "Walk-Anim.webp",
@@ -20,11 +27,18 @@
         "w": 40,
         "h": 48
       },
-      "fps": 9,
-      "row": 0,
-      "columns": 4,
-      "rows": 8,
-      "frames": 4
+      "fps": 6,
+      "frames": 4,
+      "rows": {
+        "front": 0,
+        "right": 2,
+        "back": 4,
+        "left": 6,
+        "frontRight": 1,
+        "backRight": 3,
+        "backLeft": 5,
+        "frontLeft": 7
+      }
     }
   }
 }

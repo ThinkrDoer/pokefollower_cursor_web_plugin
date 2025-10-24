@@ -8,7 +8,7 @@
         "w": 40,
         "h": 40
       },
-      "fps": 6,
+      "fps": 4,
       "frames": 8,
       "rows": {
         "front": 0,
@@ -27,7 +27,7 @@
         "w": 32,
         "h": 40
       },
-      "fps": 9,
+      "fps": 6,
       "frames": 4,
       "rows": {
         "front": 0,
