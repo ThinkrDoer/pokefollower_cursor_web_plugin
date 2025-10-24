@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const scaleVal  = document.getElementById("scaleVal");
   const offsetVal = document.getElementById("offsetVal");
   const lerpVal   = document.getElementById("lerpVal");
+  const previewSpriteEl = document.getElementById("previewSprite");
 
   // Defaults align with current content.js constants
   const DEFAULTS = {
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       scaleVal.textContent  = scale.toFixed(2) + "×";
       offsetVal.textContent = offset + " px";
       lerpVal.textContent   = lerpUI.toFixed(1);
+      setPreviewForPack(packEl.value);
     }
   );
 
@@ -89,9 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
     window.close();
   });
 
-  // Pack select — save but keep popup open
+  // Pack select — save but keep popup open, and update preview
   packEl.addEventListener("change", () => {
     save({ vcp1_pack: packEl.value });
+    setPreviewForPack(packEl.value);
   });
 
   // function clampFrom helper
@@ -102,6 +105,45 @@ document.addEventListener("DOMContentLoaded", () => {
     if (Number.isFinite(min) && v < min) return min;
     if (Number.isFinite(max) && v > max) return max;
     return v;
+  }
+
+  // --- Preview sprite helpers (robust URL + fallback) ---
+  function slugFromPack(pack) {
+    // "retro/009-blastoise" -> "blastoise"
+    const last = (pack || "").split("/").pop() || "";
+    return last.replace(/^\d+-/, "");
+  }
+
+  function setPreviewForPack(pack) {
+    if (!previewSpriteEl) return;
+
+    // Ensure preview never mirrors even if other CSS flips the main sprite
+    previewSpriteEl.style.transform = "scaleX(1)";
+
+    const slug = slugFromPack(pack);
+    const candidates = [
+      chrome.runtime.getURL(`assets/ui/${slug}.png`),
+      chrome.runtime.getURL(`assets/retro/${slug}.png`),
+    ];
+
+    let i = 0;
+    const tryNext = () => {
+      if (i >= candidates.length) {
+        previewSpriteEl.removeAttribute("src");
+        previewSpriteEl.alt = "";
+        return;
+      }
+      const url = candidates[i++];
+      const img = new Image();
+      img.onload = () => {
+        previewSpriteEl.src = url;
+        previewSpriteEl.alt = `${slug} preview`;
+      };
+      img.onerror = tryNext;
+      img.src = url;
+    };
+
+    tryNext();
   }
 
   // Scale
