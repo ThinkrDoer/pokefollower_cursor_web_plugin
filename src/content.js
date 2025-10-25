@@ -24,6 +24,13 @@ const RUNTIME = {
   // keep legacy field in sync for pickStateBySpeed()
   speedPxPerSec: 0
 };
+
+// --- behavior thresholds ---
+const SLEEP_TIMEOUT_MS = 30000; // 30s of no movement -> sleep
+
+function hasState(name) {
+  return !!(RUNTIME.meta && RUNTIME.meta.states && RUNTIME.meta.states[name]);
+}
 // --- UI-configurable tuning (persisted in chrome.storage.sync) ---
 const CONFIG = {
   scale: 1.25,   // visual scale multiplier
@@ -221,6 +228,11 @@ function applyFrame() {
 
 function pickStateBySpeed() {
   const now = performance.now();
+  // If the pack has a 'sleep' state and we've been inactive long enough, sleep.
+  if (hasState("sleep") && (now - RUNTIME.lastMoveTs) > SLEEP_TIMEOUT_MS) {
+    return "sleep";
+  }
+  // Otherwise choose idle vs walk by recent motion
   const idle = (now - RUNTIME.lastMoveTs) > 150 || RUNTIME.speedPxPerSec < 60;
   return idle ? "idle" : "walk";
 }
@@ -303,6 +315,7 @@ function onMouseMove(e) {
 
 function start() {
   createFollower();
+  RUNTIME.lastMoveTs = performance.now();
   // initialize position/target around current mouse (in case no movement yet)
   RUNTIME.pos.x = RUNTIME.lastMouse.x;
   RUNTIME.pos.y = RUNTIME.lastMouse.y;

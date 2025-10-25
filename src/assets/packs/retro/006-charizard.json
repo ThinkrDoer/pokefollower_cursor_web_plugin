@@ -39,6 +39,25 @@
         "backLeft": 5,
         "frontLeft": 7
       }
+    },
+    "sleep": {
+      "sheet": "Sleep-Anim.webp",
+      "frame": {
+        "w": 36,
+        "h": 48
+      },
+      "fps": 1,
+      "frames": 2,
+      "rows": {
+        "front": 0,
+        "right": 2,
+        "back": 4,
+        "left": 6,
+        "frontRight": 1,
+        "backRight": 3,
+        "backLeft": 5,
+        "frontLeft": 7
+      }
     }
   }
 }
