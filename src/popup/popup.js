@@ -2,6 +2,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const enabledEl = document.getElementById("enabled");
   const packEl    = document.getElementById("pack");
 
+  // Normalize pack <option>s: sort by Pokédex number and label as "###-Name"
+  function formatPackLabel(val) {
+    // val looks like "retro/009-blastoise"
+    const last = (val || "").split("/").pop() || "";
+    const [numStr, nameSlug] = last.split("-");
+    const num = (numStr || "").padStart(3, "0");
+    const name = nameSlug ? nameSlug.charAt(0).toUpperCase() + nameSlug.slice(1) : last;
+    return `${num}-${name}`;
+  }
+  function dexFromValue(val) {
+    const last = (val || "").split("/").pop() || "";
+    const n = parseInt(last, 10);
+    return Number.isFinite(n) ? n : 9999;
+  }
+  function normalizePackOptions() {
+    if (!packEl) return;
+    const opts = Array.from(packEl.options).map(o => ({ value: o.value }));
+    // sort numerically by dex
+    opts.sort((a, b) => dexFromValue(a.value) - dexFromValue(b.value));
+    // preserve current selection
+    const current = packEl.value;
+    // rebuild options with formatted labels
+    packEl.innerHTML = "";
+    for (const o of opts) {
+      const opt = document.createElement("option");
+      opt.value = o.value;
+      opt.textContent = formatPackLabel(o.value);
+      packEl.appendChild(opt);
+    }
+    // restore selection if possible
+    if (current) packEl.value = current;
+  }
+  // Apply normalization once on load so dropdown shows "###-Name" in numeric order
+  normalizePackOptions();
+
   // Sliders + readouts
   const scaleEl   = document.getElementById("scale");
   const offsetEl  = document.getElementById("offset");
