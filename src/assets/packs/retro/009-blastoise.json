@@ -50,13 +50,13 @@
       "frames": 2,
       "rows": {
         "front": 0,
-        "right": 2,
-        "back": 4,
-        "left": 6,
-        "frontRight": 1,
-        "backRight": 3,
-        "backLeft": 5,
-        "frontLeft": 7
+        "right": 0,
+        "back": 0,
+        "left": 0,
+        "frontRight": 0,
+        "backRight": 0,
+        "backLeft": 0,
+        "frontLeft": 0
       }
     }
   }
