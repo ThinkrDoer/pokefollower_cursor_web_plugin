@@ -13,8 +13,24 @@
       "name": "003-Venusaur"
     },
     {
+      "id": "retro/004-charmander",
+      "name": "004-Charmander"
+    },
+    {
+      "id": "retro/005-charmeleon",
+      "name": "005-Charmeleon"
+    },
+    {
       "id": "retro/006-charizard",
       "name": "006-Charizard"
+    },
+    {
+      "id": "retro/007-squirtle",
+      "name": "007-Squirtle"
+    },
+    {
+      "id": "retro/008-wartortle",
+      "name": "008-Wartortle"
     },
     {
       "id": "retro/009-blastoise",

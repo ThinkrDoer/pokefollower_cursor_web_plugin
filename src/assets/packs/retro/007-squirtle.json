@@ -1,5 +1,5 @@
 {
-  "name": "002-ivysaur",
+  "name": "007-squirtle",
   "flipX": true,
   "states": {
     "idle": {
@@ -9,7 +9,7 @@
         "h": 32
       },
       "fps": 2,
-      "frames": 4,
+      "frames": 8,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -27,7 +27,7 @@
         "w": 32,
         "h": 32
       },
-      "fps": 2,
+      "fps": 6,
       "frames": 4,
       "rows": {
         "front": 0,
@@ -44,7 +44,7 @@
       "sheet": "Sleep-Anim.webp",
       "frame": {
         "w": 24,
-        "h": 32
+        "h": 24
       },
       "fps": 1,
       "frames": 2,
