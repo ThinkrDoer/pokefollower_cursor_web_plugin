@@ -34,8 +34,37 @@ document.addEventListener("DOMContentLoaded", () => {
     // restore selection if possible
     if (current) packEl.value = current;
   }
-  // Apply normalization once on load so dropdown shows "###-Name" in numeric order
-  normalizePackOptions();
+
+  // Dynamically build the pack list from a generated index.json; fallback to existing options on error
+  async function populatePacksFromIndex(storedValue) {
+    try {
+      const url = chrome.runtime.getURL('assets/packs/index.json');
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('index not found');
+      const data = await res.json();
+      const list = (data && data.retro) || [];
+      if (!Array.isArray(list) || !list.length) throw new Error('index empty');
+
+      const current = storedValue || packEl.value;
+      packEl.innerHTML = '';
+      for (const item of list) {
+        const opt = document.createElement('option');
+        opt.value = item.id;                       // e.g., "retro/009-blastoise"
+        opt.textContent = item.name || formatPackLabel(item.id);
+        packEl.appendChild(opt);
+      }
+      if (current) {
+        packEl.value = current;
+        if (packEl.selectedIndex === -1 && packEl.options.length) {
+          packEl.selectedIndex = 0;
+        }
+      }
+      return true;
+    } catch (e) {
+      // Defer to static HTML options if index missing
+      return false;
+    }
+  }
 
   // Sliders + readouts
   const scaleEl   = document.getElementById("scale");
@@ -97,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["vcp1_enabled", "vcp1_pack", "vcp1_scale", "vcp1_offset", "vcp1_lerp"],
     (res) => {
       enabledEl.checked = !!res.vcp1_enabled;
-      packEl.value      = res.vcp1_pack || "retro/009-blastoise";
+      const storedPack  = res.vcp1_pack || "retro/009-blastoise";
 
       const scale  = (typeof res.vcp1_scale  === "number") ? res.vcp1_scale  : DEFAULTS.vcp1_scale;
       const offset = (typeof res.vcp1_offset === "number") ? res.vcp1_offset : DEFAULTS.vcp1_offset;
@@ -113,7 +142,18 @@ document.addEventListener("DOMContentLoaded", () => {
       scaleVal.textContent  = scale.toFixed(2) + "×";
       offsetVal.textContent = offset + " px";
       lerpVal.textContent   = lerpUI.toFixed(1);
-      setPreviewForPack(packEl.value);
+
+      // Prefer dynamic index.json; fallback to static options then normalize labels/order
+      (async () => {
+        const ok = await populatePacksFromIndex(storedPack);
+        if (!ok) {
+          // Use whatever is in HTML, but fix labels/order
+          normalizePackOptions();
+          packEl.value = storedPack;
+          if (packEl.selectedIndex === -1 && packEl.options.length) packEl.selectedIndex = 0;
+        }
+        setPreviewForPack(packEl.value);
+      })();
     }
   );
 
@@ -155,11 +195,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ensure preview never mirrors even if other CSS flips the main sprite
     previewSpriteEl.style.transform = "scaleX(1)";
 
+    const slugFull = (pack || "").split("/").pop() || "";
     const slug = slugFromPack(pack);
-    const candidates = [
-      chrome.runtime.getURL(`assets/ui/${slug}.png`),
-      chrome.runtime.getURL(`assets/retro/${slug}.png`),
-    ];
+    const slugCompact = slugFull.replace(/-/g, "");
+    const names = Array.from(new Set([slugFull, slug, slugCompact]));
+    const candidates = [];
+    for (const name of names) {
+      candidates.push(chrome.runtime.getURL(`assets/ui/${name}.png`));
+      candidates.push(chrome.runtime.getURL(`assets/retro/${name}.png`));
+    }
 
     let i = 0;
     const tryNext = () => {

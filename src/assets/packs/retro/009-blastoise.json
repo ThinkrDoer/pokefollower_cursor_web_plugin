@@ -43,7 +43,7 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 34,
+        "w": 32,
         "h": 40
       },
       "fps": 1,

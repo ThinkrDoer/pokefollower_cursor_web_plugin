@@ -1,15 +1,15 @@
 {
-  "name": "006-charizard",
+  "name": "001-bulbasaur",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
-        "h": 48
+        "w": 32,
+        "h": 40
       },
-      "fps": 2,
-      "frames": 4,
+      "fps": 1,
+      "frames": 3,
       "rows": {
         "front": 0,
         "right": 2,
@@ -25,10 +25,10 @@
       "sheet": "Walk-Anim.webp",
       "frame": {
         "w": 40,
-        "h": 48
+        "h": 40
       },
-      "fps": 6,
-      "frames": 4,
+      "fps": 3,
+      "frames": 6,
       "rows": {
         "front": 0,
         "right": 2,
@@ -43,8 +43,8 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 36,
-        "h": 48
+        "w": 30,
+        "h": 30
       },
       "fps": 1,
       "frames": 2,

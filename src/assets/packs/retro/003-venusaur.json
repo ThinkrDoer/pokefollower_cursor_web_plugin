@@ -1,12 +1,12 @@
 {
-  "name": "006-charizard",
+  "name": "003-venasaur",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
-        "h": 48
+        "w": 32,
+        "h": 32
       },
       "fps": 2,
       "frames": 4,
@@ -24,8 +24,8 @@
     "walk": {
       "sheet": "Walk-Anim.webp",
       "frame": {
-        "w": 40,
-        "h": 48
+        "w": 32,
+        "h": 32
       },
       "fps": 6,
       "frames": 4,
@@ -43,8 +43,8 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 36,
-        "h": 48
+        "w": 32,
+        "h": 32
       },
       "fps": 1,
       "frames": 2,

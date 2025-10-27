@@ -1,0 +1,24 @@
+{
+  "retro": [
+    {
+      "id": "retro/001-bulbasaur",
+      "name": "001-Bulbasaur"
+    },
+    {
+      "id": "retro/002-ivysaur",
+      "name": "002-Ivysaur"
+    },
+    {
+      "id": "retro/003-venusaur",
+      "name": "003-Venusaur"
+    },
+    {
+      "id": "retro/006-charizard",
+      "name": "006-Charizard"
+    },
+    {
+      "id": "retro/009-blastoise",
+      "name": "009-Blastoise"
+    }
+  ]
+}

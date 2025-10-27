@@ -4,10 +4,7 @@
   "description": "Chrome plugin that follows your cursor with Pokémon sprites",
   "type": "module",
   "scripts": {
-  "parse": "node src/scripts/parse-anim.cjs"
-},
-  "dependencies": {
-    "fast-xml-parser": "^4.4.0",
-    "image-size": "^1.0.2"
+    "parse": "node src/scripts/parse-anim.cjs",
+    "build:index": "node src/scripts/build-pack-index.cjs"
   }
 }
