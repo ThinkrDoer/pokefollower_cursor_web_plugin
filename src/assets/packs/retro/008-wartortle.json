@@ -1,15 +1,15 @@
 {
-  "name": "009-blastoise",
+  "name": "008-wartortle",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
+        "w": 24,
         "h": 40
       },
-      "fps": 4,
-      "frames": 8,
+      "fps": 2,
+      "frames": 4,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -44,7 +44,7 @@
       "sheet": "Sleep-Anim.webp",
       "frame": {
         "w": 32,
-        "h": 40
+        "h": 32
       },
       "fps": 1,
       "frames": 2,

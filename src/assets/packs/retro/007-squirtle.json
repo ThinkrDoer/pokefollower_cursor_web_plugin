@@ -1,14 +1,14 @@
 {
-  "name": "009-blastoise",
+  "name": "007-squirtle",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
-        "h": 40
+        "w": 32,
+        "h": 32
       },
-      "fps": 4,
+      "fps": 2,
       "frames": 8,
       "rows": {
         "front": 0,
@@ -25,7 +25,7 @@
       "sheet": "Walk-Anim.webp",
       "frame": {
         "w": 32,
-        "h": 40
+        "h": 32
       },
       "fps": 6,
       "frames": 4,
@@ -43,8 +43,8 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 32,
-        "h": 40
+        "w": 24,
+        "h": 24
       },
       "fps": 1,
       "frames": 2,

@@ -1,0 +1,44 @@
+{
+  "retro": [
+    {
+      "id": "retro/001-bulbasaur",
+      "name": "001-Bulbasaur"
+    },
+    {
+      "id": "retro/002-ivysaur",
+      "name": "002-Ivysaur"
+    },
+    {
+      "id": "retro/003-venusaur",
+      "name": "003-Venusaur"
+    },
+    {
+      "id": "retro/004-charmander",
+      "name": "004-Charmander"
+    },
+    {
+      "id": "retro/005-charmeleon",
+      "name": "005-Charmeleon"
+    },
+    {
+      "id": "retro/006-charizard",
+      "name": "006-Charizard"
+    },
+    {
+      "id": "retro/007-squirtle",
+      "name": "007-Squirtle"
+    },
+    {
+      "id": "retro/008-wartortle",
+      "name": "008-Wartortle"
+    },
+    {
+      "id": "retro/009-blastoise",
+      "name": "009-Blastoise"
+    },
+    {
+      "id": "retro/175-togepi",
+      "name": "175-Togepi"
+    }
+  ]
+}
