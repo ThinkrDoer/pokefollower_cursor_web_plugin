@@ -6,7 +6,17 @@
   "permissions": ["storage"],
   "action": {
     "default_title": "PokéFollower",
-    "default_popup": "popup/index.html"
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "assets/icons/pokeball-16.png",
+      "32": "assets/icons/pokeball-32.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icons/pokeball-16.png",
+    "32": "assets/icons/pokeball-32.png",
+    "48": "assets/icons/pokeball-48.png",
+    "128": "assets/icons/pokeball-128.png"
   },
   "content_scripts": [
     {
