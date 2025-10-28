@@ -177,9 +177,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const v = Number(el.value);
     const min = Number(el.min);
     const max = Number(el.max);
+    if (!Number.isFinite(v)) {
+      if (Number.isFinite(min)) return min;
+      if (Number.isFinite(max)) return max;
+      return 0;
+    }
     if (Number.isFinite(min) && v < min) return min;
     if (Number.isFinite(max) && v > max) return max;
     return v;
+  }
+
+  function isPartialNumber(value) {
+    return value === "" || value.endsWith(".");
   }
 
   // --- Preview sprite helpers (robust URL + fallback) ---
@@ -225,49 +234,85 @@ document.addEventListener("DOMContentLoaded", () => {
     tryNext();
   }
 
-  // Scale
-  function onScaleInput() {
-    const v = clampFrom(scaleEl);
-    scaleEl.value = String(v);
-    scaleVal.textContent = v.toFixed(2) + "×";
-    setLocal({ vcp1_scale: v });
-    pushConfig({ vcp1_scale: v });
+  function attachEnterCommit(input, commitFn) {
+    if (!input) return;
+    input.addEventListener("keydown", (evt) => {
+      if (evt.key === "Enter") {
+        evt.preventDefault();
+        commitFn({ flush: true });
+      }
+    });
   }
-  scaleEl.addEventListener("input", onScaleInput);
-  scaleEl.addEventListener("change", () => {
+
+  // Scale
+  function previewScale() {
+    const raw = scaleEl.value.trim();
+    if (isPartialNumber(raw)) {
+      scaleVal.textContent = raw;
+      return;
+    }
+    const num = Number(raw);
+    if (Number.isFinite(num)) {
+      scaleVal.textContent = num.toFixed(2) + "×";
+    } else {
+      scaleVal.textContent = raw;
+    }
+  }
+  function commitScale({ flush = false } = {}) {
     const v = clampFrom(scaleEl);
-    pushConfig({ vcp1_scale: v }, { flush: true });
-  });
+    const normalized = Number.isFinite(v) ? Number(v.toFixed(2)) : DEFAULTS.vcp1_scale;
+    scaleEl.value = normalized.toFixed(2);
+    scaleVal.textContent = normalized.toFixed(2) + "×";
+    setLocal({ vcp1_scale: normalized });
+    pushConfig({ vcp1_scale: normalized }, { flush });
+  }
+  scaleEl.addEventListener("input", previewScale);
+  scaleEl.addEventListener("change", () => commitScale({ flush: true }));
+  attachEnterCommit(scaleEl, commitScale);
 
   // Offset
-  function onOffsetInput() {
-    const v = clampFrom(offsetEl);
-    offsetEl.value = String(v);
-    offsetVal.textContent = v + " px";
-    setLocal({ vcp1_offset: v });
-    pushConfig({ vcp1_offset: v });
+  function previewOffset() {
+    const raw = offsetEl.value.trim();
+    offsetVal.textContent = raw ? raw + " px" : "";
   }
-  offsetEl.addEventListener("input", onOffsetInput);
-  offsetEl.addEventListener("change", () => {
+  function commitOffset({ flush = false } = {}) {
     const v = clampFrom(offsetEl);
-    pushConfig({ vcp1_offset: v }, { flush: true });
-  });
+    const normalized = Number.isFinite(v) ? Math.round(v) : Math.round(DEFAULTS.vcp1_offset);
+    offsetEl.value = String(normalized);
+    offsetVal.textContent = normalized + " px";
+    setLocal({ vcp1_offset: normalized });
+    pushConfig({ vcp1_offset: normalized }, { flush });
+  }
+  offsetEl.addEventListener("input", previewOffset);
+  offsetEl.addEventListener("change", () => commitOffset({ flush: true }));
+  attachEnterCommit(offsetEl, commitOffset);
 
   // Lerp
-  function onLerpInput() {
-    const ui = clampFrom(lerpEl);           // UI 0.5–5.0
-    const uiFixed = Number(ui.toFixed(1));
-    lerpEl.value = String(uiFixed);
-    lerpVal.textContent = uiFixed.toFixed(1);
-    const lerp = uiFixed / 10;              // internal 0.05–0.50
-    setLocal({ vcp1_lerp: lerp });
-    pushConfig({ vcp1_lerp: lerp });
+  function previewLerp() {
+    const raw = lerpEl.value.trim();
+    if (isPartialNumber(raw)) {
+      lerpVal.textContent = raw ? raw : "";
+      return;
+    }
+    const num = Number(raw);
+    if (Number.isFinite(num)) {
+      lerpVal.textContent = num.toFixed(1);
+    } else {
+      lerpVal.textContent = raw;
+    }
   }
-  lerpEl.addEventListener("input", onLerpInput);
-  lerpEl.addEventListener("change", () => {
+  function commitLerp({ flush = false } = {}) {
     const ui = clampFrom(lerpEl);
-    pushConfig({ vcp1_lerp: ui / 10 }, { flush: true });
-  });
+    const normalized = Number.isFinite(ui) ? Number(ui.toFixed(1)) : Number((DEFAULTS.vcp1_lerp * 10).toFixed(1));
+    lerpEl.value = normalized.toFixed(1);
+    lerpVal.textContent = normalized.toFixed(1);
+    const lerp = normalized / 10;              // internal 0.05–0.50
+    setLocal({ vcp1_lerp: lerp });
+    pushConfig({ vcp1_lerp: lerp }, { flush });
+  }
+  lerpEl.addEventListener("input", previewLerp);
+  lerpEl.addEventListener("change", () => commitLerp({ flush: true }));
+  attachEnterCommit(lerpEl, commitLerp);
 
   // Removed dragging pointer event listeners for sliders since number inputs do not need them
 
