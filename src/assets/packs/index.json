@@ -49,6 +49,38 @@
       "name": "012-Butterfree"
     },
     {
+      "id": "retro/013-weedle",
+      "name": "013-Weedle"
+    },
+    {
+      "id": "retro/014-kakuna",
+      "name": "014-Kakuna"
+    },
+    {
+      "id": "retro/015-beedrill",
+      "name": "015-Beedrill"
+    },
+    {
+      "id": "retro/016-pidgey",
+      "name": "016-Pidgey"
+    },
+    {
+      "id": "retro/017-pidgeotto",
+      "name": "017-Pidgeotto"
+    },
+    {
+      "id": "retro/018-pidgeot",
+      "name": "018-Pidgeot"
+    },
+    {
+      "id": "retro/019-rattata",
+      "name": "019-Rattata"
+    },
+    {
+      "id": "retro/020-raticate",
+      "name": "020-Raticate"
+    },
+    {
       "id": "retro/175-togepi",
       "name": "175-Togepi"
     }
