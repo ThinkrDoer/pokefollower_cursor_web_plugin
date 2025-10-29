@@ -81,6 +81,38 @@
       "name": "020-Raticate"
     },
     {
+      "id": "retro/021-spearow",
+      "name": "021-Spearow"
+    },
+    {
+      "id": "retro/022-fearow",
+      "name": "022-Fearow"
+    },
+    {
+      "id": "retro/023-ekans",
+      "name": "023-Ekans"
+    },
+    {
+      "id": "retro/024-arbok",
+      "name": "024-Arbok"
+    },
+    {
+      "id": "retro/025-pikachu",
+      "name": "025-Pikachu"
+    },
+    {
+      "id": "retro/026-raichu",
+      "name": "026-Raichu"
+    },
+    {
+      "id": "retro/027-sandshrew",
+      "name": "027-Sandshrew"
+    },
+    {
+      "id": "retro/028-sandslash",
+      "name": "028-Sandslash"
+    },
+    {
       "id": "retro/175-togepi",
       "name": "175-Togepi"
     }
