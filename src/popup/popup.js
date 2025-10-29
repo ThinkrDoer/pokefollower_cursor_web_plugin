@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const enabledEl = document.getElementById("enabled");
   const packEl    = document.getElementById("pack");
+  const pickerEl  = document.querySelector(".picker");
+  const searchBtn = pickerEl ? pickerEl.querySelector(".glass") : null;
+  const searchEl  = document.getElementById("packSearch");
+  const searchListEl = document.getElementById("packSuggestions");
 
   // Normalize pack <option>s: sort by Pokédex number and label as "###-Name"
   function formatPackLabel(val) {
@@ -16,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const n = parseInt(last, 10);
     return Number.isFinite(n) ? n : 9999;
   }
+  const PACK_META = [];
   function normalizePackOptions() {
     if (!packEl) return;
     const opts = Array.from(packEl.options).map(o => ({ value: o.value }));
@@ -33,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // restore selection if possible
     if (current) packEl.value = current;
+    capturePackMeta();
   }
 
   // Dynamically build the pack list from a generated index.json; fallback to existing options on error
@@ -53,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         opt.textContent = item.name || formatPackLabel(item.id);
         packEl.appendChild(opt);
       }
+      capturePackMeta();
       if (current) {
         packEl.value = current;
         if (packEl.selectedIndex === -1 && packEl.options.length) {
@@ -172,6 +179,40 @@ document.addEventListener("DOMContentLoaded", () => {
     setPreviewForPack(packEl.value);
   });
 
+  if (searchBtn) {
+    searchBtn.addEventListener("click", () => openPackSearch());
+    searchBtn.addEventListener("keydown", (evt) => {
+      if (evt.key === "Enter" || evt.key === " ") {
+        evt.preventDefault();
+        openPackSearch();
+      }
+    });
+  }
+
+  if (searchEl) {
+    searchEl.addEventListener("input", () => {
+      searchEl.classList.remove("no-match");
+    });
+    searchEl.addEventListener("keydown", (evt) => {
+      if (evt.key === "Enter") {
+        evt.preventDefault();
+        commitPackSearch();
+      } else if (evt.key === "Escape") {
+        evt.preventDefault();
+        closePackSearch();
+      }
+    });
+    searchEl.addEventListener("change", () => {
+      if (searchEl.value.trim()) commitPackSearch();
+    });
+    searchEl.addEventListener("blur", () => {
+      // Allow other handlers (change) to fire before closing
+      setTimeout(() => {
+        if (isSearchOpen()) closePackSearch();
+      }, 0);
+    });
+  }
+
   // function clampFrom helper
   function clampFrom(el) {
     const v = Number(el.value);
@@ -232,6 +273,166 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     tryNext();
+  }
+
+  // --- Pack search helpers (magnifying glass action) ---
+  function normalizeSearch(str) {
+    return (str || "").toLowerCase();
+  }
+  function compactSearch(str) {
+    return normalizeSearch(str).replace(/[^a-z0-9]/g, "");
+  }
+
+  function rebuildSearchSuggestions() {
+    if (!searchListEl) return;
+    searchListEl.innerHTML = "";
+
+    const seen = new Set();
+    for (const meta of PACK_META) {
+      const display = (meta.display && meta.display.trim()) ||
+        (meta.label && meta.label.trim()) ||
+        (meta.name && meta.name.trim()) ||
+        meta.id;
+      if (!display || seen.has(display)) continue;
+      seen.add(display);
+      const opt = document.createElement("option");
+      opt.value = display;
+      searchListEl.appendChild(opt);
+    }
+  }
+
+  function capturePackMeta() {
+    PACK_META.length = 0;
+    if (!packEl) return;
+    const opts = Array.from(packEl.options);
+    for (const opt of opts) {
+      const id = opt.value;
+      const label = opt.textContent || formatPackLabel(id);
+      const dex = dexFromValue(id);
+      const dexStr = Number.isFinite(dex) ? String(dex).padStart(3, "0") : "";
+      const formatted = formatPackLabel(id);
+      const labelTrimmed = (label || "").replace(/^\s*\d+\s*[-#]?\s*/, "").replace(/\s*\(#\d+\)\s*$/, "").trim();
+      const fallbackName = (formatted || "").replace(/^\s*\d+\s*[-#]?\s*/, "").trim();
+      const name = labelTrimmed || fallbackName || label || id;
+      const lowerName = normalizeSearch(name);
+      const lowerLabel = normalizeSearch(label);
+      const lowerId = normalizeSearch(id);
+      const compactName = compactSearch(name);
+      const compactLabel = compactSearch(label);
+      const compactId = compactSearch(id);
+      const display = dexStr ? `#${dexStr} ${name}` : name;
+      const values = new Set([
+        lowerName,
+        compactName,
+        lowerLabel,
+        compactLabel,
+        lowerId,
+        compactId
+      ]);
+      if (formatted) {
+        values.add(normalizeSearch(formatted));
+        values.add(compactSearch(formatted));
+      }
+      if (display) {
+        values.add(normalizeSearch(display));
+        values.add(compactSearch(display));
+      }
+      if (dexStr) {
+        values.add(String(dex));
+        values.add(dexStr);
+        values.add(`#${dexStr}`);
+      }
+      values.delete("");
+      PACK_META.push({
+        id,
+        label,
+        name,
+        display,
+        dex,
+        dexStr,
+        searchValues: Array.from(values)
+      });
+    }
+    rebuildSearchSuggestions();
+  }
+
+  function resolveSearchTerm(term) {
+    const raw = (term || "").trim();
+    if (!raw) return null;
+
+    const digits = raw.replace(/[^0-9]/g, "");
+    if (digits) {
+      const num = parseInt(digits, 10);
+      if (Number.isFinite(num)) {
+        const byDex = PACK_META.find(meta => meta.dex === num);
+        if (byDex) return byDex.id;
+      }
+    }
+
+    const lower = normalizeSearch(raw);
+    const compact = compactSearch(raw);
+
+    const exact = PACK_META.find(meta =>
+      meta.searchValues.some(val => val === lower || val === compact)
+    );
+    if (exact) return exact.id;
+
+    const partial = PACK_META.find(meta =>
+      meta.searchValues.some(val => val.includes(compact) || val.includes(lower))
+    );
+    return partial ? partial.id : null;
+  }
+
+  function isSearchOpen() {
+    return !!(pickerEl && pickerEl.classList.contains("searching"));
+  }
+
+  function openPackSearch() {
+    if (!pickerEl || !searchEl) return;
+    if (!PACK_META.length) capturePackMeta();
+    if (isSearchOpen()) {
+      searchEl.focus();
+      searchEl.select();
+      return;
+    }
+    pickerEl.classList.add("searching");
+    if (packEl) packEl.setAttribute("aria-hidden", "true");
+    searchEl.value = "";
+    searchEl.classList.remove("no-match");
+    searchEl.placeholder = "Search name or #";
+    requestAnimationFrame(() => {
+      searchEl.focus();
+    });
+  }
+
+  function closePackSearch() {
+    if (!pickerEl || !searchEl) return;
+    const wasOpen = isSearchOpen();
+    pickerEl.classList.remove("searching");
+    if (packEl) packEl.removeAttribute("aria-hidden");
+    searchEl.classList.remove("no-match");
+    searchEl.value = "";
+    if (wasOpen && document.activeElement === searchEl && packEl) {
+      packEl.focus();
+    }
+  }
+
+  function commitPackSearch() {
+    if (!searchEl || !packEl) return;
+    const term = searchEl.value.trim();
+    if (!term) {
+      closePackSearch();
+      return;
+    }
+    const matchId = resolveSearchTerm(term);
+    if (!matchId) {
+      searchEl.classList.add("no-match");
+      return;
+    }
+    searchEl.classList.remove("no-match");
+    closePackSearch();
+    packEl.value = matchId;
+    packEl.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   function attachEnterCommit(input, commitFn) {
@@ -401,6 +602,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ESC to close (QoL)
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") window.close();
+    if (e.key === "Escape") {
+      if (isSearchOpen()) {
+        e.preventDefault();
+        closePackSearch();
+        return;
+      }
+      window.close();
+    }
   });
 });
