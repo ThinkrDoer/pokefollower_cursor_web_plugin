@@ -2,10 +2,11 @@
 /**
  * Usage:
  * node scripts/parse-anim.js \
- *   --xml src/assets/raw/blastoise/Blastoise_AnimData.xml \
- *   --dir src/assets/raw/blastoise \
- *   --name blastoise \
- *   --out src/assets/packs/retro/blastoise.json \
+ *   --xml src/assets/raw/gen-1/009-blastoise/Blastoise_AnimData.xml \
+ *   --dir src/assets/raw/gen-1/009-blastoise \
+ *   --name 009-blastoise \
+ *   --generation gen-1 \
+ *   --out src/assets/packs/retro/gen-1/009-blastoise.json \
  *   --idle Idle-Anim.webp --walk Walk-Anim.webp \
  *   --idleRow 0 --walkRow 0 \
  *   --fpsIdle 6 --fpsWalk 9
@@ -39,6 +40,8 @@ const fpsIdleArg  = arg('fpsIdle');
 const fpsWalkArg  = arg('fpsWalk');
 const fpsSleepArg = arg('fpsSleep');
 const flipX      = /^false$/i.test(arg('flipX', 'true')) ? false : true;
+const generation = arg('generation', 'gen-1');
+const rawPathArg = arg('rawPath');
 
 if (!xmlPath) {
   console.error('Missing --xml path to AnimData.xml');
@@ -160,6 +163,13 @@ function createState({ anim, fileRel, rowBase, fpsArg, fallbackFps }) {
 // Build states
 const out = {
   name,
+  generation,
+  rawPath: (() => {
+    if (rawPathArg) return rawPathArg.replace(/^\/+|\/+$/g, '');
+    const prefix = typeof generation === 'string' && generation.length ? generation.replace(/^\/+|\/+$/g, '') : '';
+    const slug = String(name || '').replace(/^\/+|\/+$/g, '');
+    return prefix ? `${prefix}/${slug}` : slug;
+  })(),
   flipX,
   states: {}
 };

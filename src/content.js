@@ -1,7 +1,10 @@
 // === VCP1 content script: load pack JSON + animate idle/walk with left/right flip ===
+const DEFAULT_PACK = "retro/gen-1/009-blastoise";
+const GENERATION_DIRS = ["gen-1","gen-2","gen-3","gen-4","gen-5","gen-6","gen-7","gen-8","gen-9"];
+
 const STATE = {
   enabled: false,
-  pack: "retro/009-blastoise",  // default
+  pack: DEFAULT_PACK,  // default
   facingLeft: false
 };
 
@@ -165,15 +168,70 @@ function removeFollower() {
 }
 
 function packSlug() {
-  // STATE.pack like "retro/009-blastoise" -> "009-blastoise"
+  // STATE.pack like "retro/gen-1/009-blastoise" -> "009-blastoise"
   const parts = STATE.pack.split("/");
   return parts[parts.length - 1];
+}
+
+function dexFromSlug(slug) {
+  const dex = parseInt((slug || "").split("-")[0], 10);
+  return Number.isFinite(dex) ? dex : null;
+}
+
+function generationForDex(dex) {
+  if (!Number.isFinite(dex)) return null;
+  if (dex >= 1 && dex <= 151) return "gen-1";
+  if (dex <= 251) return "gen-2";
+  if (dex <= 386) return "gen-3";
+  if (dex <= 493) return "gen-4";
+  if (dex <= 649) return "gen-5";
+  if (dex <= 721) return "gen-6";
+  if (dex <= 809) return "gen-7";
+  if (dex <= 905) return "gen-8";
+  return "gen-9";
+}
+
+function buildPackCandidates(packKey) {
+  const clean = typeof packKey === "string" ? packKey.trim().replace(/^\/+|\/+$/g, "") : "";
+  if (!clean) return [DEFAULT_PACK];
+  const candidates = [clean];
+  if (!clean.includes("/gen-")) {
+    const parts = clean.split("/");
+    const slug = parts.pop();
+    const prefix = parts.join("/");
+    const dex = dexFromSlug(slug);
+    const inferred = generationForDex(dex);
+    const pushCandidate = (gen) => {
+      const candidate = `${prefix}/${gen}/${slug}`;
+      if (!candidates.includes(candidate)) candidates.push(candidate);
+    };
+    if (inferred) pushCandidate(inferred);
+    GENERATION_DIRS.forEach(pushCandidate);
+  }
+  return candidates;
+}
+
+async function fetchPackMeta(packKey) {
+  const jsonPath = `assets/packs/${packKey}.json`;
+  const res = await fetch(extUrl(jsonPath));
+  if (!res.ok) {
+    const error = new Error(`HTTP ${res.status} for ${jsonPath}`);
+    error.status = res.status;
+    throw error;
+  }
+  const meta = await res.json();
+  if (!meta || !meta.states || !meta.states.idle || !meta.states.walk) {
+    throw new Error("Pack schema invalid: missing states.idle or states.walk");
+  }
+  return meta;
 }
 
 function sheetUrlFor(stateName) {
   const st = RUNTIME.meta && RUNTIME.meta.states ? RUNTIME.meta.states[stateName] : null;
   const sheetFilename = st && st.sheet ? st.sheet : "";
-  const rawFolder = `assets/raw/${packSlug()}/`;
+  const metaPath = typeof RUNTIME.meta?.rawPath === "string" ? RUNTIME.meta.rawPath.trim() : "";
+  const slug = metaPath ? metaPath.replace(/^\/+|\/+$/g, "") : packSlug();
+  const rawFolder = `assets/raw/${slug}/`;
   return extUrl(rawFolder + sheetFilename);
 }
 
@@ -332,15 +390,30 @@ function stop() {
 }
 
 async function loadPack(packKey) {
-  const jsonPath = `assets/packs/${packKey}.json`;
-  const meta = await fetch(extUrl(jsonPath)).then(r => {
-    if (!r.ok) throw new Error(`HTTP ${r.status} for ${jsonPath}`);
-    return r.json();
-  });
-  // Minimal schema checks
-  if (!meta || !meta.states || !meta.states.idle || !meta.states.walk) {
-    throw new Error("Pack schema invalid: missing states.idle or states.walk");
+  const candidates = buildPackCandidates(packKey);
+  let chosen = null;
+  let meta = null;
+  let lastError = null;
+
+  for (const candidate of candidates) {
+    try {
+      meta = await fetchPackMeta(candidate);
+      chosen = candidate;
+      break;
+    } catch (err) {
+      lastError = err;
+    }
   }
+
+  if (!chosen || !meta) {
+    throw lastError || new Error(`Unable to load pack for key "${packKey}"`);
+  }
+
+  const migrated = chosen !== packKey;
+  if (migrated) {
+    try { chrome.storage.sync.set({ vcp1_pack: chosen }); } catch (_) {}
+  }
+  STATE.pack = chosen;
   RUNTIME.meta = meta;
   // reset animation state for the new pack
   resetAnimationForNewPack();
@@ -361,13 +434,13 @@ chrome.storage.sync.get(
   ["vcp1_enabled", "vcp1_pack", "vcp1_scale", "vcp1_offset", "vcp1_lerp"],
   async (res) => {
     STATE.enabled = !!res.vcp1_enabled;
-    STATE.pack    = res.vcp1_pack || "retro/009-blastoise";
+    STATE.pack    = res.vcp1_pack || DEFAULT_PACK;
     applyConfigPatch(res);
     try {
       await loadPack(STATE.pack);
     } catch (e) {
       console.warn("pack load failed; reverting to default", e);
-      STATE.pack = "retro/009-blastoise";
+      STATE.pack = DEFAULT_PACK;
       try { await loadPack(STATE.pack); } catch (e2) { console.warn("default pack also failed", e2); }
     }
     applyState();
@@ -383,7 +456,7 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
   }
   if (changes.vcp1_pack) {
     const prev = STATE.pack;
-    STATE.pack = changes.vcp1_pack.newValue || "retro/009-blastoise";
+    STATE.pack = changes.vcp1_pack.newValue || DEFAULT_PACK;
     try {
       await loadPack(STATE.pack);
       // If follower exists, immediately apply a frame from the new sheet
