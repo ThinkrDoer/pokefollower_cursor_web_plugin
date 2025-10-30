@@ -30,7 +30,9 @@
     "resources": [
       "assets/sprites/*",
       "assets/packs/*/*",
-      "assets/raw/*/*"
+      "assets/packs/*/*/*",
+      "assets/raw/*/*",
+      "assets/raw/*/*/*"
     ],
     "matches": ["<all_urls>"]
   }

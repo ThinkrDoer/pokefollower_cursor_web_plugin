@@ -1,3 +1,5 @@
+const DEFAULT_PACK = "retro/gen-1/009-blastoise";
+
 document.addEventListener("DOMContentLoaded", () => {
   const enabledEl = document.getElementById("enabled");
   const packEl    = document.getElementById("pack");
@@ -8,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Normalize pack <option>s: sort by Pokédex number and label as "###-Name"
   function formatPackLabel(val) {
-    // val looks like "retro/009-blastoise"
+    // val looks like "retro/gen-1/009-blastoise"
     const last = (val || "").split("/").pop() || "";
     const [numStr, nameSlug] = last.split("-");
     const num = (numStr || "").padStart(3, "0");
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       packEl.innerHTML = '';
       for (const item of list) {
         const opt = document.createElement('option');
-        opt.value = item.id;                       // e.g., "retro/009-blastoise"
+        opt.value = item.id;                       // e.g., "retro/gen-1/009-blastoise"
         opt.textContent = item.name || formatPackLabel(item.id);
         packEl.appendChild(opt);
       }
@@ -133,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["vcp1_enabled", "vcp1_pack", "vcp1_scale", "vcp1_offset", "vcp1_lerp"],
     (res) => {
       enabledEl.checked = !!res.vcp1_enabled;
-      const storedPack  = res.vcp1_pack || "retro/009-blastoise";
+      const storedPack  = res.vcp1_pack || DEFAULT_PACK;
 
       const scale  = (typeof res.vcp1_scale  === "number") ? res.vcp1_scale  : DEFAULTS.vcp1_scale;
       const offset = (typeof res.vcp1_offset === "number") ? res.vcp1_offset : DEFAULTS.vcp1_offset;
@@ -234,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Preview sprite helpers (robust URL + fallback) ---
   function slugFromPack(pack) {
-    // "retro/009-blastoise" -> "blastoise"
+    // "retro/gen-1/009-blastoise" -> "blastoise"
     const last = (pack || "").split("/").pop() || "";
     return last.replace(/^\d+-/, "");
   }

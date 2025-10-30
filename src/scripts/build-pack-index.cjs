@@ -1,5 +1,5 @@
 // Build an index of available packs so the popup can populate the selector dynamically.
-// Scans:  src/assets/packs/retro/*.json
+// Scans:  src/assets/packs/retro/**/*.json
 // Writes: src/assets/packs/index.json  ->  { "retro": [ { id, name }, ... ] }
 
 const fs = require("fs");
@@ -22,22 +22,36 @@ function dexFromSlug(slug) {
   return Number.isFinite(num) ? num : 9999;
 }
 
+function collectPackFiles(dir, relSegments = []) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const packs = [];
+  entries.forEach((entry) => {
+    if (entry.name.startsWith(".")) return;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      packs.push(...collectPackFiles(full, relSegments.concat(entry.name)));
+    } else if (entry.isFile() && entry.name.endsWith(".json")) {
+      const slug = path.basename(entry.name, ".json");
+      const id = ["retro"].concat(relSegments, slug).join("/");
+      packs.push({ id, slug });
+    }
+  });
+  return packs;
+}
+
 function main() {
   if (!fs.existsSync(RETRO_DIR)) {
     console.error("Missing directory:", RETRO_DIR);
     process.exit(1);
   }
 
-  const entries = fs.readdirSync(RETRO_DIR)
-    .filter(f => f.endsWith(".json"))
-    .map(file => {
-      const slug = path.basename(file, ".json"); // e.g., "009-blastoise"
-      return {
-        id: `retro/${slug}`,
-        name: labelFromSlug(slug),
-        dex: dexFromSlug(slug),
-      };
-    })
+  const rawEntries = collectPackFiles(RETRO_DIR);
+  const entries = rawEntries
+    .map(({ id, slug }) => ({
+      id,
+      name: labelFromSlug(slug),
+      dex: dexFromSlug(slug)
+    }))
     .sort((a, b) => a.dex - b.dex)
     .map(({ id, name }) => ({ id, name }));
 

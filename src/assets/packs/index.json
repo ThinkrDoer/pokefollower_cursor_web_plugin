@@ -1,143 +1,143 @@
 {
   "retro": [
     {
-      "id": "retro/001-bulbasaur",
+      "id": "retro/gen-1/001-bulbasaur",
       "name": "001-Bulbasaur"
     },
     {
-      "id": "retro/002-ivysaur",
+      "id": "retro/gen-1/002-ivysaur",
       "name": "002-Ivysaur"
     },
     {
-      "id": "retro/003-venusaur",
+      "id": "retro/gen-1/003-venusaur",
       "name": "003-Venusaur"
     },
     {
-      "id": "retro/004-charmander",
+      "id": "retro/gen-1/004-charmander",
       "name": "004-Charmander"
     },
     {
-      "id": "retro/005-charmeleon",
+      "id": "retro/gen-1/005-charmeleon",
       "name": "005-Charmeleon"
     },
     {
-      "id": "retro/006-charizard",
+      "id": "retro/gen-1/006-charizard",
       "name": "006-Charizard"
     },
     {
-      "id": "retro/007-squirtle",
+      "id": "retro/gen-1/007-squirtle",
       "name": "007-Squirtle"
     },
     {
-      "id": "retro/008-wartortle",
+      "id": "retro/gen-1/008-wartortle",
       "name": "008-Wartortle"
     },
     {
-      "id": "retro/009-blastoise",
+      "id": "retro/gen-1/009-blastoise",
       "name": "009-Blastoise"
     },
     {
-      "id": "retro/010-caterpie",
+      "id": "retro/gen-1/010-caterpie",
       "name": "010-Caterpie"
     },
     {
-      "id": "retro/011-metapod",
+      "id": "retro/gen-1/011-metapod",
       "name": "011-Metapod"
     },
     {
-      "id": "retro/012-butterfree",
+      "id": "retro/gen-1/012-butterfree",
       "name": "012-Butterfree"
     },
     {
-      "id": "retro/013-weedle",
+      "id": "retro/gen-1/013-weedle",
       "name": "013-Weedle"
     },
     {
-      "id": "retro/014-kakuna",
+      "id": "retro/gen-1/014-kakuna",
       "name": "014-Kakuna"
     },
     {
-      "id": "retro/015-beedrill",
+      "id": "retro/gen-1/015-beedrill",
       "name": "015-Beedrill"
     },
     {
-      "id": "retro/016-pidgey",
+      "id": "retro/gen-1/016-pidgey",
       "name": "016-Pidgey"
     },
     {
-      "id": "retro/017-pidgeotto",
+      "id": "retro/gen-1/017-pidgeotto",
       "name": "017-Pidgeotto"
     },
     {
-      "id": "retro/018-pidgeot",
+      "id": "retro/gen-1/018-pidgeot",
       "name": "018-Pidgeot"
     },
     {
-      "id": "retro/019-rattata",
+      "id": "retro/gen-1/019-rattata",
       "name": "019-Rattata"
     },
     {
-      "id": "retro/020-raticate",
+      "id": "retro/gen-1/020-raticate",
       "name": "020-Raticate"
     },
     {
-      "id": "retro/021-spearow",
+      "id": "retro/gen-1/021-spearow",
       "name": "021-Spearow"
     },
     {
-      "id": "retro/022-fearow",
+      "id": "retro/gen-1/022-fearow",
       "name": "022-Fearow"
     },
     {
-      "id": "retro/023-ekans",
+      "id": "retro/gen-1/023-ekans",
       "name": "023-Ekans"
     },
     {
-      "id": "retro/024-arbok",
+      "id": "retro/gen-1/024-arbok",
       "name": "024-Arbok"
     },
     {
-      "id": "retro/025-pikachu",
+      "id": "retro/gen-1/025-pikachu",
       "name": "025-Pikachu"
     },
     {
-      "id": "retro/026-raichu",
+      "id": "retro/gen-1/026-raichu",
       "name": "026-Raichu"
     },
     {
-      "id": "retro/027-sandshrew",
+      "id": "retro/gen-1/027-sandshrew",
       "name": "027-Sandshrew"
     },
     {
-      "id": "retro/028-sandslash",
+      "id": "retro/gen-1/028-sandslash",
       "name": "028-Sandslash"
     },
     {
-      "id": "retro/029-nidoran-f",
+      "id": "retro/gen-1/029-nidoran-f",
       "name": "029-Nidoran"
     },
     {
-      "id": "retro/030-nidorina",
+      "id": "retro/gen-1/030-nidorina",
       "name": "030-Nidorina"
     },
     {
-      "id": "retro/031-nidoqueen",
+      "id": "retro/gen-1/031-nidoqueen",
       "name": "031-Nidoqueen"
     },
     {
-      "id": "retro/032-nidoran-m",
+      "id": "retro/gen-1/032-nidoran-m",
       "name": "032-Nidoran"
     },
     {
-      "id": "retro/033-nidorino",
+      "id": "retro/gen-1/033-nidorino",
       "name": "033-Nidorino"
     },
     {
-      "id": "retro/034-nidoking",
+      "id": "retro/gen-1/034-nidoking",
       "name": "034-Nidoking"
     },
     {
-      "id": "retro/175-togepi",
+      "id": "retro/gen-2/175-togepi",
       "name": "175-Togepi"
     }
   ]
