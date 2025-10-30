@@ -241,6 +241,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return last.replace(/^\d+-/, "");
   }
 
+  function generationFromPack(pack) {
+    const parts = (pack || "").split("/");
+    if (parts.length < 3) return null;
+    const maybe = parts[parts.length - 2] || "";
+    return maybe.startsWith("gen-") ? maybe : null;
+  }
+
   function setPreviewForPack(pack) {
     if (!previewSpriteEl) return;
 
@@ -251,10 +258,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const slug = slugFromPack(pack);
     const slugCompact = slugFull.replace(/-/g, "");
     const names = Array.from(new Set([slugFull, slug, slugCompact]));
+    const generation = generationFromPack(pack);
     const candidates = [];
+    const pushCandidate = (path) => {
+      if (!candidates.includes(path)) candidates.push(path);
+    };
     for (const name of names) {
-      candidates.push(chrome.runtime.getURL(`assets/ui/${name}.png`));
-      candidates.push(chrome.runtime.getURL(`assets/retro/${name}.png`));
+      if (generation) {
+        pushCandidate(chrome.runtime.getURL(`assets/ui/${generation}/${name}.png`));
+      }
+      pushCandidate(chrome.runtime.getURL(`assets/ui/${name}.png`));
+      pushCandidate(chrome.runtime.getURL(`assets/retro/${name}.png`));
     }
 
     let i = 0;
