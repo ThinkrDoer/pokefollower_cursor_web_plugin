@@ -1,17 +1,17 @@
 {
-  "name": "068-machamp",
+  "name": "095-onix",
   "generation": "gen-1",
-  "rawPath": "gen-1/068-machamp",
+  "rawPath": "gen-1/095-onix",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
-        "h": 48
+        "w": 96,
+        "h": 104
       },
-      "fps": 4,
-      "frames": 10,
+      "fps": 2,
+      "frames": 4,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -26,8 +26,8 @@
     "walk": {
       "sheet": "Walk-Anim.webp",
       "frame": {
-        "w": 32,
-        "h": 48
+        "w": 88,
+        "h": 112
       },
       "fps": 6,
       "frames": 4,
@@ -45,8 +45,8 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 32,
-        "h": 40
+        "w": 40,
+        "h": 64
       },
       "fps": 1,
       "frames": 2,

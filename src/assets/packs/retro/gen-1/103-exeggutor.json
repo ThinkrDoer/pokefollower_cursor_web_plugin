@@ -1,17 +1,17 @@
 {
-  "name": "068-machamp",
+  "name": "103-exeggutor",
   "generation": "gen-1",
-  "rawPath": "gen-1/068-machamp",
+  "rawPath": "gen-1/103-exeggutor",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
         "w": 40,
-        "h": 48
+        "h": 56
       },
-      "fps": 4,
-      "frames": 10,
+      "fps": 2,
+      "frames": 4,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -26,7 +26,7 @@
     "walk": {
       "sheet": "Walk-Anim.webp",
       "frame": {
-        "w": 32,
+        "w": 40,
         "h": 48
       },
       "fps": 6,

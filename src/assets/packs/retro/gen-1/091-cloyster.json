@@ -1,17 +1,17 @@
 {
-  "name": "068-machamp",
+  "name": "091-cloyster",
   "generation": "gen-1",
-  "rawPath": "gen-1/068-machamp",
+  "rawPath": "gen-1/091-cloyster",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
+        "w": 32,
         "h": 48
       },
-      "fps": 4,
-      "frames": 10,
+      "fps": 2,
+      "frames": 6,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -30,7 +30,7 @@
         "h": 48
       },
       "fps": 6,
-      "frames": 4,
+      "frames": 6,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -45,11 +45,11 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 32,
-        "h": 40
+        "w": 24,
+        "h": 48
       },
       "fps": 1,
-      "frames": 2,
+      "frames": 6,
       "rows": {
         "front": 0,
         "frontRight": 0,

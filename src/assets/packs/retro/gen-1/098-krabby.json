@@ -1,17 +1,17 @@
 {
-  "name": "068-machamp",
+  "name": "098-krabby",
   "generation": "gen-1",
-  "rawPath": "gen-1/068-machamp",
+  "rawPath": "gen-1/098-krabby",
   "flipX": true,
   "states": {
     "idle": {
       "sheet": "Idle-Anim.webp",
       "frame": {
-        "w": 40,
-        "h": 48
+        "w": 24,
+        "h": 40
       },
-      "fps": 4,
-      "frames": 10,
+      "fps": 1,
+      "frames": 2,
       "rows": {
         "front": 0,
         "frontRight": 1,
@@ -27,7 +27,7 @@
       "sheet": "Walk-Anim.webp",
       "frame": {
         "w": 32,
-        "h": 48
+        "h": 32
       },
       "fps": 6,
       "frames": 4,
@@ -45,8 +45,8 @@
     "sleep": {
       "sheet": "Sleep-Anim.webp",
       "frame": {
-        "w": 32,
-        "h": 40
+        "w": 24,
+        "h": 16
       },
       "fps": 1,
       "frames": 2,
