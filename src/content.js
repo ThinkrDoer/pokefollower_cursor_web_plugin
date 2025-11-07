@@ -10,6 +10,7 @@ const STATE = {
 
 let followerEl = null;
 let rafId = null;
+let running = false;
 
 const RUNTIME = {
   meta: null,                 // loaded JSON pack
@@ -372,6 +373,8 @@ function onMouseMove(e) {
 }
 
 function start() {
+  if (running) return;
+  running = true;
   createFollower();
   RUNTIME.lastMoveTs = performance.now();
   // initialize position/target around current mouse (in case no movement yet)
@@ -385,6 +388,8 @@ function start() {
 }
 
 function stop() {
+  if (!running) return;
+  running = false;
   window.removeEventListener("mousemove", onMouseMove);
   removeFollower();
 }
@@ -418,11 +423,12 @@ async function loadPack(packKey) {
   // reset animation state for the new pack
   resetAnimationForNewPack();
   await ensureImagesLoaded(meta);
-  // Restart animation loop if switching packs
-  if (rafId) cancelAnimationFrame(rafId);
+  // Restart animation loop if switching packs while active
   if (followerEl) removeFollower();
-  createFollower();
-  loop();
+  if (running) {
+    createFollower();
+    loop();
+  }
 }
 
 function applyState() {
