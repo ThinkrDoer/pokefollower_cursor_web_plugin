@@ -513,8 +513,100 @@
       "name": "128-Tauros"
     },
     {
+      "id": "retro/gen-1/129-magikarp",
+      "name": "129-Magikarp"
+    },
+    {
+      "id": "retro/gen-1/130-gyarados",
+      "name": "130-Gyarados"
+    },
+    {
+      "id": "retro/gen-1/131-lapras",
+      "name": "131-Lapras"
+    },
+    {
+      "id": "retro/gen-1/132-ditto",
+      "name": "132-Ditto"
+    },
+    {
+      "id": "retro/gen-1/133-eevee",
+      "name": "133-Eevee"
+    },
+    {
+      "id": "retro/gen-1/134-vaporeon",
+      "name": "134-Vaporeon"
+    },
+    {
+      "id": "retro/gen-1/135-jolteon",
+      "name": "135-Jolteon"
+    },
+    {
+      "id": "retro/gen-1/136-flareon",
+      "name": "136-Flareon"
+    },
+    {
+      "id": "retro/gen-1/137-porygon",
+      "name": "137-Porygon"
+    },
+    {
+      "id": "retro/gen-1/138-omanyte",
+      "name": "138-Omanyte"
+    },
+    {
+      "id": "retro/gen-1/139-omastar",
+      "name": "139-Omastar"
+    },
+    {
+      "id": "retro/gen-1/140-kabuto",
+      "name": "140-Kabuto"
+    },
+    {
+      "id": "retro/gen-1/141-kabutops",
+      "name": "141-Kabutops"
+    },
+    {
+      "id": "retro/gen-1/142-aerodactyl",
+      "name": "142-Aerodactyl"
+    },
+    {
+      "id": "retro/gen-1/143-snorlax",
+      "name": "143-Snorlax"
+    },
+    {
+      "id": "retro/gen-1/144-articuno",
+      "name": "144-Articuno"
+    },
+    {
+      "id": "retro/gen-1/145-zapdos",
+      "name": "145-Zapdos"
+    },
+    {
+      "id": "retro/gen-1/146-moltres",
+      "name": "146-Moltres"
+    },
+    {
+      "id": "retro/gen-1/147-dratini",
+      "name": "147-Dratini"
+    },
+    {
+      "id": "retro/gen-1/148-dragonair",
+      "name": "148-Dragonair"
+    },
+    {
+      "id": "retro/gen-1/149-dragonite",
+      "name": "149-Dragonite"
+    },
+    {
+      "id": "retro/gen-1/150-mewtwo",
+      "name": "150-Mewtwo"
+    },
+    {
+      "id": "retro/gen-1/151-mew",
+      "name": "151-Mew"
+    },
+    {
       "id": "retro/gen-2/175-togepi",
-      "name": "175-Togepi"
+      "name": "175-Togepi (Kats Fave)"
     }
   ]
 }
