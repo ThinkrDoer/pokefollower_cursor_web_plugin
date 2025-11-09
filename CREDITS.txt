@@ -1,0 +1,14 @@
+# 🎨 Credits
+
+**PokeFollower Cursor Web Plugin**
+
+### Thanks to the good people at
+- [PMD Sprite Repository](https://sprites.pmdcollab.org) — community artists under CC-BY-NC-SA 4.0, for Pokémon sprite sheets and movement data
+- [Pokémon Database](https://pokemondb.net) (contact: info@pokemondb.net) — for Pokémon popup images and reference details  
+
+### Sprite Assets
+© Individual PMD Sprite contributors.  
+Used under *Creative Commons BY-NC-SA 4.0*.
+
+### Code & Design
+© 2025 Ali Hamad and contributors — MIT License.

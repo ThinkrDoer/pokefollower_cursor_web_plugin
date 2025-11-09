@@ -201,9 +201,13 @@
 
     /* Bottom hint text over red band */
     .hint {
-      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-      color: #fff; font-weight: 600; margin: 0; font-size: 12px; text-align: center;
-      z-index: 2; pointer-events: none; white-space: nowrap; opacity: 0.4; font-style: italic;
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      color: #fff; font-weight: 600; margin: 0; font-size: 11px; text-align: center;
+      z-index: 2; pointer-events: auto; white-space: normal; opacity: 0.55; font-style: italic;
+      width: calc(100% - 12px); line-height: 2;
+    }
+    .hint a {
+      color: inherit;
     }
 
     /* Accessibility helper */
@@ -301,7 +305,12 @@
     </div>
 
     <!-- Bottom hint over red band -->
-    <p class="hint">Settings persist via <code>chrome.storage.sync</code>.</p>
+    <p class="hint">
+      Sprite art & images provided by
+      <a href="https://sprites.pmdcollab.org" target="_blank" rel="noreferrer noopener">PMD Collab</a>
+      &amp;
+      <a href="https://pokemondb.net" target="_blank" rel="noreferrer noopener">Pokémon DB</a>
+    </p>
   </div>
 
   <script src="popup.js"></script>
