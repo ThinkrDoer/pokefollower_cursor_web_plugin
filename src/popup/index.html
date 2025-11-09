@@ -116,23 +116,6 @@
       transform: scaleX(-1);             /* face right */
     }
 
-    /* Shuffle button */
-    .shuffle {
-      display: flex; align-items: center; justify-content: center;
-      padding: 5px; margin: 0 auto 5px;
-      background: none; border: 0;
-      cursor: pointer;
-    }
-    .shuffle:focus-visible {
-      outline: 2px solid #000;
-      border-radius: 50px;
-      outline-offset: 2px;
-    }
-    .shuffle svg {
-      width: 60px; height: 35px;
-      display: block;
-    }
-
     /* Search-like select */
     .picker {
       margin: 8px auto; width: 240px;
@@ -156,7 +139,7 @@
       outline-offset: 2px;
     }
     #pack, #packSearch {
-      appearance: none; border: 0; padding: 0 32px; margin: 0; width: 100%;
+      appearance: none; border: 0; padding: 0 44px; margin: 0; width: 100%;
       background: transparent; font-weight: 800; font-size: 14px; outline: none;
       text-align: center; text-align-last: center; -moz-text-align-last: center;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -177,6 +160,21 @@
     .picker.searching #pack { display: none; }
     .picker.searching #packSearch { display: block; }
     .picker datalist { display: none; }
+    .shuffle {
+      position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+      width: 26px; height: 26px; border: 0; background: none; padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 2;
+    }
+    .shuffle:focus-visible {
+      outline: 2px solid #000;
+      border-radius: 50%;
+      outline-offset: 1px;
+    }
+    .shuffle svg {
+      width: 20px; height: 20px;
+      display: block;
+    }
 
     /* Controls layout: three columns */
     .triples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center; margin-top: 6px; }
@@ -238,13 +236,6 @@
       <div class="chev right" title="Next"></div>
     </div>
 
-    <button type="button" class="shuffle" aria-label="Shuffle Pokémon">
-      <span class="sr-only">Shuffle Pokémon</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M4 6.5h7.5L9.9 4.9 11.3 3.5l5.5 5.5-5.5 5.5-1.4-1.4 1.6-1.6H4zM20 17.5h-7.5l1.6 1.6-1.4 1.4-5.5-5.5 5.5-5.5 1.4 1.4-1.6 1.6H20z" fill="#000" stroke="#000" stroke-width=".5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-
     <!-- Search-like pack selector -->
     <div class="picker">
       <button type="button" class="glass" aria-label="Search Pokémon"></button>
@@ -254,6 +245,12 @@
       </select>
       <input id="packSearch" class="searchInput" type="text" inputmode="search" autocomplete="off" list="packSuggestions" placeholder="Search name or #" aria-label="Search Pokémon" />
       <datalist id="packSuggestions"></datalist>
+      <button type="button" class="shuffle" aria-label="Shuffle Pokémon">
+        <span class="sr-only">Shuffle Pokémon</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 6.5h7.5L9.9 4.9 11.3 3.5l5.5 5.5-5.5 5.5-1.4-1.4 1.6-1.6H4zM20 17.5h-7.5l1.6 1.6-1.4 1.4-5.5-5.5 5.5-5.5 1.4 1.4-1.6 1.6H20z" fill="#000" stroke="#000" stroke-width=".5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Triple controls -->
