@@ -101,7 +101,7 @@
       align-items: center;
       justify-content: center;
       column-gap: 26px;
-      margin: 18px auto 12px;
+      margin: 5px auto 0;
       width: max-content;
       max-width: 100%;
     }
@@ -114,6 +114,23 @@
       image-rendering: pixelated;
       width: 150px; height: 150px;       /* scaled up from 96px */
       transform: scaleX(-1);             /* face right */
+    }
+
+    /* Shuffle button */
+    .shuffle {
+      display: flex; align-items: center; justify-content: center;
+      padding: 5px; margin: 0 auto 5px;
+      background: none; border: 0;
+      cursor: pointer;
+    }
+    .shuffle:focus-visible {
+      outline: 2px solid #000;
+      border-radius: 50px;
+      outline-offset: 2px;
+    }
+    .shuffle svg {
+      width: 60px; height: 35px;
+      display: block;
     }
 
     /* Search-like select */
@@ -143,6 +160,7 @@
       background: transparent; font-weight: 800; font-size: 14px; outline: none;
       text-align: center; text-align-last: center; -moz-text-align-last: center;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      flex: 1; min-width: 0;
     }
     #packSearch {
       display: none;
@@ -215,6 +233,13 @@
       <img id="previewSprite" src="../assets/ui/gen-1/009-blastoise.png" alt="Preview sprite" />
       <div class="chev right" title="Next"></div>
     </div>
+
+    <button type="button" class="shuffle" aria-label="Shuffle Pokémon">
+      <span class="sr-only">Shuffle Pokémon</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M4 6.5h7.5L9.9 4.9 11.3 3.5l5.5 5.5-5.5 5.5-1.4-1.4 1.6-1.6H4zM20 17.5h-7.5l1.6 1.6-1.4 1.4-5.5-5.5 5.5-5.5 1.4 1.4-1.6 1.6H20z" fill="#000" stroke="#000" stroke-width=".5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
 
     <!-- Search-like pack selector -->
     <div class="picker">

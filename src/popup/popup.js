@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchBtn = pickerEl ? pickerEl.querySelector(".glass") : null;
   const searchEl  = document.getElementById("packSearch");
   const searchListEl = document.getElementById("packSuggestions");
+  const shuffleBtn = document.querySelector(".shuffle");
 
   // Normalize pack <option>s: sort by Pokédex number and label as "###-Name"
   function formatPackLabel(val) {
@@ -180,6 +181,21 @@ document.addEventListener("DOMContentLoaded", () => {
     save({ vcp1_pack: packEl.value });
     setPreviewForPack(packEl.value);
   });
+
+  if (shuffleBtn) {
+    shuffleBtn.addEventListener("click", () => {
+      if (!packEl || !packEl.options.length) return;
+      const total = packEl.options.length;
+      if (!total) return;
+      const current = packEl.selectedIndex >= 0 ? packEl.selectedIndex : 0;
+      let next = Math.floor(Math.random() * total);
+      if (total > 1 && next === current) {
+        next = (next + 1) % total;
+      }
+      packEl.selectedIndex = next;
+      packEl.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  }
 
   if (searchBtn) {
     searchBtn.addEventListener("click", () => openPackSearch());
