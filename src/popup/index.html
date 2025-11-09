@@ -171,9 +171,11 @@
       border-radius: 50%;
       outline-offset: 1px;
     }
-    .shuffle svg {
-      width: 20px; height: 20px;
+    .shuffleIcon {
       display: block;
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
     }
 
     /* Controls layout: three columns */
@@ -247,9 +249,7 @@
       <datalist id="packSuggestions"></datalist>
       <button type="button" class="shuffle" aria-label="Shuffle Pokémon">
         <span class="sr-only">Shuffle Pokémon</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M4 6.5h7.5L9.9 4.9 11.3 3.5l5.5 5.5-5.5 5.5-1.4-1.4 1.6-1.6H4zM20 17.5h-7.5l1.6 1.6-1.4 1.4-5.5-5.5 5.5-5.5 1.4 1.4-1.6 1.6H20z" fill="#000" stroke="#000" stroke-width=".5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <img class="shuffleIcon" src="../assets/ui/buttons/shuffle-icon.png" alt="" aria-hidden="true" />
       </button>
     </div>
 
