@@ -96,7 +96,14 @@
 
     /* Preview block with chevrons */
     .preview {
-      display: grid; grid-template-columns: 75px 1fr 75px; align-items: center; gap: 30px; margin-top: 8px;
+      display: grid;
+      grid-template-columns: auto auto auto;
+      align-items: center;
+      justify-content: center;
+      column-gap: 26px;
+      margin: 18px auto 12px;
+      width: max-content;
+      max-width: 100%;
     }
     .chev { inline-size: 0; block-size: 0; border: 12px solid transparent; cursor: pointer; }
     .preview .chev.left  { justify-self: end;  border-right-color: #000; }
@@ -133,7 +140,7 @@
     #pack {
       appearance: none; border: 0; padding: 0; margin: 0; width: 100%;
       background: transparent; font-weight: 800; font-size: 14px; outline: none;
-      text-align-last: center; -moz-text-align-last: center;
+      text-align: center; text-align-last: center; -moz-text-align-last: center;
     }
     #packSearch {
       display: none;
