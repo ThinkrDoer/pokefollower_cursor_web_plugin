@@ -11,7 +11,7 @@
     body {
       margin: 0;
       padding-top: 64px;         /* give space below top band/notch */
-      padding-bottom: 56px;      /* give space above bottom band text */
+      padding-bottom: 60px;      /* give space above bottom band text */
       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       min-width: 360px;
       max-width: 380px;
@@ -90,7 +90,6 @@
     /* ON state */
     #enabled:checked { background: #EF4036; }
     #enabled:checked::after { left: calc(100% - 18px); }
-
     /* Card body */
     .card { padding: 10px 16px 0; }
 
@@ -203,10 +202,10 @@
 
     /* Bottom hint text over red band */
     .hint {
-      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-      color: #fff; font-weight: 600; margin: 0; font-size: 11px; text-align: center;
+      position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+      color: #fff; font-weight: 600; margin: 0; font-size: 10px; text-align: center;
       z-index: 2; pointer-events: auto; white-space: normal; opacity: 0.55; font-style: italic;
-      width: calc(100% - 12px); line-height: 2;
+      width: calc(100% - 12px); line-height: 1.6;
     }
     .hint a {
       color: inherit;
@@ -311,6 +310,12 @@
       <a href="https://sprites.pmdcollab.org" target="_blank" rel="noreferrer noopener">PMD Collab</a>
       &amp;
       <a href="https://pokemondb.net" target="_blank" rel="noreferrer noopener">Pokémon DB</a>
+      <br />
+      <a
+        href="https://practicaloverthinker.notion.site/2a941183ac9c8045ab36ed3569c26470?pvs=105"
+        target="_blank"
+        rel="noreferrer noopener"
+      >Share your feedback here</a>
     </p>
   </div>
 
