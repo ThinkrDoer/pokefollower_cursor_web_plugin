@@ -11,7 +11,7 @@
     body {
       margin: 0;
       padding-top: 64px;         /* give space below top band/notch */
-      padding-bottom: 46px;      /* give space above bottom band text */
+      padding-bottom: 60px;      /* give space above bottom band text */
       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       min-width: 360px;
       max-width: 380px;
@@ -90,16 +90,6 @@
     /* ON state */
     #enabled:checked { background: #EF4036; }
     #enabled:checked::after { left: calc(100% - 18px); }
-    .feedbackLink {
-      position: absolute; top: -18px; right: 14px;
-      color: #fff; font-weight: 600; font-size: 11px; font-style: italic;
-      text-decoration: none; opacity: 0.65; z-index: 2;
-    }
-    .feedbackLink:hover,
-    .feedbackLink:focus-visible {
-      opacity: 1; text-decoration: underline;
-    }
-
     /* Card body */
     .card { padding: 10px 16px 0; }
 
@@ -239,12 +229,6 @@
       <span>Enable Follower</span>
       <input id="enabled" type="checkbox" />
     </label>
-    <a
-      class="feedbackLink"
-      href="https://practicaloverthinker.notion.site/2a941183ac9c8045ab36ed3569c26470?pvs=105"
-      target="_blank"
-      rel="noreferrer noopener"
-    >Share your feedback here</a>
   </div>
 
   <div class="card">
