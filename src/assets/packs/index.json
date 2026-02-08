@@ -486,7 +486,7 @@
     },
     {
       "id": "retro/gen-1/122-mr-mime",
-      "name": "122-Mr. Mime"
+      "name": "122-Mr"
     },
     {
       "id": "retro/gen-1/123-scyther",
@@ -605,8 +605,44 @@
       "name": "151-Mew"
     },
     {
+      "id": "retro/gen-2/152-chikorita",
+      "name": "152-Chikorita"
+    },
+    {
+      "id": "retro/gen-2/153-bayleef",
+      "name": "153-Bayleef"
+    },
+    {
+      "id": "retro/gen-2/154-meganium",
+      "name": "154-Meganium"
+    },
+    {
+      "id": "retro/gen-2/155-cyndaquil",
+      "name": "155-Cyndaquil"
+    },
+    {
+      "id": "retro/gen-2/156-quilava",
+      "name": "156-Quilava"
+    },
+    {
+      "id": "retro/gen-2/157-typhlosion",
+      "name": "157-Typhlosion"
+    },
+    {
+      "id": "retro/gen-2/158-totodile",
+      "name": "158-Totodile"
+    },
+    {
+      "id": "retro/gen-2/159-croconaw",
+      "name": "159-Croconaw"
+    },
+    {
+      "id": "retro/gen-2/160-feraligatr",
+      "name": "160-Feraligatr"
+    },
+    {
       "id": "retro/gen-2/175-togepi",
-      "name": "175-Togepi (Kats Fave)"
+      "name": "175-Togepi"
     }
   ]
 }
