@@ -685,8 +685,88 @@
       "name": "171-Lanturn"
     },
     {
+      "id": "retro/gen-2/172-pichu",
+      "name": "172-Pichu"
+    },
+    {
+      "id": "retro/gen-2/173-cleffa",
+      "name": "173-Cleffa"
+    },
+    {
+      "id": "retro/gen-2/174-igglybuff",
+      "name": "174-Igglybuff"
+    },
+    {
       "id": "retro/gen-2/175-togepi",
       "name": "175-Togepi"
+    },
+    {
+      "id": "retro/gen-2/176-togetic",
+      "name": "176-Togetic"
+    },
+    {
+      "id": "retro/gen-2/177-natu",
+      "name": "177-Natu"
+    },
+    {
+      "id": "retro/gen-2/178-xatu",
+      "name": "178-Xatu"
+    },
+    {
+      "id": "retro/gen-2/179-mareep",
+      "name": "179-Mareep"
+    },
+    {
+      "id": "retro/gen-2/180-flaaffy",
+      "name": "180-Flaaffy"
+    },
+    {
+      "id": "retro/gen-2/181-ampharos",
+      "name": "181-Ampharos"
+    },
+    {
+      "id": "retro/gen-2/182-bellossom",
+      "name": "182-Bellossom"
+    },
+    {
+      "id": "retro/gen-2/183-marill",
+      "name": "183-Marill"
+    },
+    {
+      "id": "retro/gen-2/184-azumarill",
+      "name": "184-Azumarill"
+    },
+    {
+      "id": "retro/gen-2/185-sudowoodo",
+      "name": "185-Sudowoodo"
+    },
+    {
+      "id": "retro/gen-2/186-politoed",
+      "name": "186-Politoed"
+    },
+    {
+      "id": "retro/gen-2/187-hoppip",
+      "name": "187-Hoppip"
+    },
+    {
+      "id": "retro/gen-2/188-skiploom",
+      "name": "188-Skiploom"
+    },
+    {
+      "id": "retro/gen-2/189-jumpluff",
+      "name": "189-Jumpluff"
+    },
+    {
+      "id": "retro/gen-2/190-aipom",
+      "name": "190-Aipom"
+    },
+    {
+      "id": "retro/gen-2/191-sunkern",
+      "name": "191-Sunkern"
+    },
+    {
+      "id": "retro/gen-2/192-sunflora",
+      "name": "192-Sunflora"
     }
   ]
 }
