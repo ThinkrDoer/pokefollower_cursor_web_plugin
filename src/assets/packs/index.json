@@ -847,6 +847,26 @@
     {
       "id": "retro/gen-2/212-scizor",
       "name": "212-Scizor"
+    },
+    {
+      "id": "retro/gen-2/213-shuckle",
+      "name": "213-Shuckle"
+    },
+    {
+      "id": "retro/gen-2/214-heracross",
+      "name": "214-Heracross"
+    },
+    {
+      "id": "retro/gen-2/215-sneasel",
+      "name": "215-Sneasel"
+    },
+    {
+      "id": "retro/gen-2/216-teddiursa",
+      "name": "216-Teddiursa"
+    },
+    {
+      "id": "retro/gen-2/217-ursaring",
+      "name": "217-Ursaring"
     }
   ]
 }
