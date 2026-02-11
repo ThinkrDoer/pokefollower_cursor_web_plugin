@@ -767,6 +767,86 @@
     {
       "id": "retro/gen-2/192-sunflora",
       "name": "192-Sunflora"
+    },
+    {
+      "id": "retro/gen-2/193-yanma",
+      "name": "193-Yanma"
+    },
+    {
+      "id": "retro/gen-2/194-wooper",
+      "name": "194-Wooper"
+    },
+    {
+      "id": "retro/gen-2/195-quagsire",
+      "name": "195-Quagsire"
+    },
+    {
+      "id": "retro/gen-2/196-espeon",
+      "name": "196-Espeon"
+    },
+    {
+      "id": "retro/gen-2/197-umbreon",
+      "name": "197-Umbreon"
+    },
+    {
+      "id": "retro/gen-2/198-murkrow",
+      "name": "198-Murkrow"
+    },
+    {
+      "id": "retro/gen-2/199-slowking",
+      "name": "199-Slowking"
+    },
+    {
+      "id": "retro/gen-2/200-misdreavus",
+      "name": "200-Misdreavus"
+    },
+    {
+      "id": "retro/gen-2/201-unown",
+      "name": "201-Unown"
+    },
+    {
+      "id": "retro/gen-2/202-wobbuffet",
+      "name": "202-Wobbuffet"
+    },
+    {
+      "id": "retro/gen-2/203-girafarig",
+      "name": "203-Girafarig"
+    },
+    {
+      "id": "retro/gen-2/204-pineco",
+      "name": "204-Pineco"
+    },
+    {
+      "id": "retro/gen-2/205-forretress",
+      "name": "205-Forretress"
+    },
+    {
+      "id": "retro/gen-2/206-dunsparce",
+      "name": "206-Dunsparce"
+    },
+    {
+      "id": "retro/gen-2/207-gligar",
+      "name": "207-Gligar"
+    },
+    {
+      "id": "retro/gen-2/208-steelix",
+      "name": "208-Steelix"
+    },
+    {
+      "id": "retro/gen-2/209-snubbull",
+      "name": "209-Snubbull"
+    },
+    {
+      "id": "retro/gen-2/210-granbull",
+      "name": "210-Granbull"
+    },
+    {
+      "id": "retro/gen-2/211-qwilfish",
+      "name": "211-Qwilfish"
+    },
+    {
+      "id": "retro/gen-2/212-scizor",
+      "name": "212-Scizor"
     }
   ]
 }
