@@ -12,7 +12,7 @@ PokéFollower started as a personal experiment to recapture that warm, playful f
 
 ### About Me
 
-My name is **Ali,**. I am trying to build more things in my life, and this plugin was one of my first accomplishments in learning how to do so. 
+My name is **Ali**. I am trying to build more things in my life, and this plugin was one of my first accomplishments in learning how to do so. 
 
 ---
 
