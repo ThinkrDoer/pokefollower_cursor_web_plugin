@@ -19,3 +19,11 @@ My name is **Ali**. I am trying to build more things in my life, and this plugin
 ### Your Feedback Matters
 
 This extension is still evolving, and your input helps shape what comes next. Whether you've found a bug, have a feature idea, or just want to share your experience, I'd love to hear from you.
+
+---
+
+### What's Next?
+
+I'm working on adding more Pokémon generations, potentially new behaviors (like attacks or sitting), and potentially emotes. If you have ideas or requests, let me know!
+
+Thanks for being part of this journey. Happy browsing, and may your Pokémon companion bring you good vibes!
