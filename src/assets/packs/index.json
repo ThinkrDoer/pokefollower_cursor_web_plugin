@@ -903,6 +903,42 @@
     {
       "id": "retro/gen-2/226-mantine",
       "name": "226-Mantine"
+    },
+    {
+      "id": "retro/gen-2/227-skarmory",
+      "name": "227-Skarmory"
+    },
+    {
+      "id": "retro/gen-2/228-houndour",
+      "name": "228-Houndour"
+    },
+    {
+      "id": "retro/gen-2/229-houndoom",
+      "name": "229-Houndoom"
+    },
+    {
+      "id": "retro/gen-2/230-kingdra",
+      "name": "230-Kingdra"
+    },
+    {
+      "id": "retro/gen-2/231-phanpy",
+      "name": "231-Phanpy"
+    },
+    {
+      "id": "retro/gen-2/232-donphan",
+      "name": "232-Donphan"
+    },
+    {
+      "id": "retro/gen-2/233-porygon2",
+      "name": "233-Porygon2"
+    },
+    {
+      "id": "retro/gen-2/234-stantler",
+      "name": "234-Stantler"
+    },
+    {
+      "id": "retro/gen-2/235-smeargle",
+      "name": "235-Smeargle"
     }
   ]
 }
