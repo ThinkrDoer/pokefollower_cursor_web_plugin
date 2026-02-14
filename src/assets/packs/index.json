@@ -867,6 +867,42 @@
     {
       "id": "retro/gen-2/217-ursaring",
       "name": "217-Ursaring"
+    },
+    {
+      "id": "retro/gen-2/218-slugma",
+      "name": "218-Slugma"
+    },
+    {
+      "id": "retro/gen-2/219-magcargo",
+      "name": "219-Magcargo"
+    },
+    {
+      "id": "retro/gen-2/220-swinub",
+      "name": "220-Swinub"
+    },
+    {
+      "id": "retro/gen-2/221-piloswine",
+      "name": "221-Piloswine"
+    },
+    {
+      "id": "retro/gen-2/222-corsola",
+      "name": "222-Corsola"
+    },
+    {
+      "id": "retro/gen-2/223-remoraid",
+      "name": "223-Remoraid"
+    },
+    {
+      "id": "retro/gen-2/224-octillery",
+      "name": "224-Octillery"
+    },
+    {
+      "id": "retro/gen-2/225-delibird",
+      "name": "225-Delibird"
+    },
+    {
+      "id": "retro/gen-2/226-mantine",
+      "name": "226-Mantine"
     }
   ]
 }
