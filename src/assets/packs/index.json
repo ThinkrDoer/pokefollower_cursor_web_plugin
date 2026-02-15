@@ -939,6 +939,70 @@
     {
       "id": "retro/gen-2/235-smeargle",
       "name": "235-Smeargle"
+    },
+    {
+      "id": "retro/gen-2/236-tyrogue",
+      "name": "236-Tyrogue"
+    },
+    {
+      "id": "retro/gen-2/237-hitmontop",
+      "name": "237-Hitmontop"
+    },
+    {
+      "id": "retro/gen-2/238-smoochum",
+      "name": "238-Smoochum"
+    },
+    {
+      "id": "retro/gen-2/239-elekid",
+      "name": "239-Elekid"
+    },
+    {
+      "id": "retro/gen-2/240-magby",
+      "name": "240-Magby"
+    },
+    {
+      "id": "retro/gen-2/241-miltank",
+      "name": "241-Miltank"
+    },
+    {
+      "id": "retro/gen-2/242-blissey",
+      "name": "242-Blissey"
+    },
+    {
+      "id": "retro/gen-2/243-raikou",
+      "name": "243-Raikou"
+    },
+    {
+      "id": "retro/gen-2/244-entei",
+      "name": "244-Entei"
+    },
+    {
+      "id": "retro/gen-2/245-suicune",
+      "name": "245-Suicune"
+    },
+    {
+      "id": "retro/gen-2/246-larvitar",
+      "name": "246-Larvitar"
+    },
+    {
+      "id": "retro/gen-2/247-pupitar",
+      "name": "247-Pupitar"
+    },
+    {
+      "id": "retro/gen-2/248-tyranitar",
+      "name": "248-Tyranitar"
+    },
+    {
+      "id": "retro/gen-2/249-lugia",
+      "name": "249-Lugia"
+    },
+    {
+      "id": "retro/gen-2/250-ho-oh",
+      "name": "250-Ho"
+    },
+    {
+      "id": "retro/gen-2/251-celebi",
+      "name": "251-Celebi"
     }
   ]
 }
