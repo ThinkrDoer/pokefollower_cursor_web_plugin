@@ -12,10 +12,19 @@ const OUT_FILE  = path.join(PACKS_DIR, "index.json");
 
 // Helpers
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function titleCaseSlug(name) {
+  return String(name || "")
+    .split("-")
+    .filter(Boolean)
+    .map(capitalize)
+    .join("-");
+}
 function labelFromSlug(slug) {
   // slug like "009-blastoise" -> "009-Blastoise"
-  const [num, name] = slug.split("-");
-  return `${String(num || "").padStart(3, "0")}-${capitalize(name || slug)}`;
+  const dash = slug.indexOf("-");
+  const num = dash >= 0 ? slug.slice(0, dash) : slug;
+  const name = dash >= 0 ? slug.slice(dash + 1) : slug;
+  return `${String(num || "").padStart(3, "0")}-${titleCaseSlug(name || slug)}`;
 }
 function dexFromSlug(slug) {
   const num = parseInt((slug.split("-")[0] || "").trim(), 10);

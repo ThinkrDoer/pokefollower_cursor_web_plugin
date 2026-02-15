@@ -114,7 +114,7 @@
     },
     {
       "id": "retro/gen-1/029-nidoran-f",
-      "name": "029-Nidoran"
+      "name": "029-Nidoran-F"
     },
     {
       "id": "retro/gen-1/030-nidorina",
@@ -126,7 +126,7 @@
     },
     {
       "id": "retro/gen-1/032-nidoran-m",
-      "name": "032-Nidoran"
+      "name": "032-Nidoran-M"
     },
     {
       "id": "retro/gen-1/033-nidorino",
@@ -486,7 +486,7 @@
     },
     {
       "id": "retro/gen-1/122-mr-mime",
-      "name": "122-Mr"
+      "name": "122-Mr-Mime"
     },
     {
       "id": "retro/gen-1/123-scyther",
@@ -998,7 +998,7 @@
     },
     {
       "id": "retro/gen-2/250-ho-oh",
-      "name": "250-Ho"
+      "name": "250-Ho-Oh"
     },
     {
       "id": "retro/gen-2/251-celebi",

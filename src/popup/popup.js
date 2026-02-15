@@ -10,12 +10,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const shuffleBtn = document.querySelector(".shuffle");
 
   // Normalize pack <option>s: sort by Pokédex number and label as "###-Name"
+  function titleCaseSlug(name) {
+    return String(name || "")
+      .split("-")
+      .filter(Boolean)
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join("-");
+  }
   function formatPackLabel(val) {
     // val looks like "retro/gen-1/009-blastoise"
     const last = (val || "").split("/").pop() || "";
-    const [numStr, nameSlug] = last.split("-");
+    const dash = last.indexOf("-");
+    const numStr = dash >= 0 ? last.slice(0, dash) : last;
+    const nameSlug = dash >= 0 ? last.slice(dash + 1) : "";
     const num = (numStr || "").padStart(3, "0");
-    const name = nameSlug ? nameSlug.charAt(0).toUpperCase() + nameSlug.slice(1) : last;
+    const name = nameSlug ? titleCaseSlug(nameSlug) : last;
     return `${num}-${name}`;
   }
   function dexFromValue(val) {
