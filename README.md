@@ -1,4 +1,4 @@
-### Welcome, Trainer! 👋
+## Welcome, Trainer! 👋
 
 Thanks for checking out **PokéFollower** - a browser extension that brings a little nostalgic joy to your browsing experience with cute retro 2D Pokémon sprites that follow your cursor around the web.
 
@@ -27,3 +27,8 @@ This extension is still evolving, and your input helps shape what comes next. Wh
 I'm working on adding more Pokémon generations, potentially new behaviors (like attacks or sitting), and potentially emotes. If you have ideas or requests, let me know!
 
 Thanks for being part of this journey. Happy browsing, and may your Pokémon companion bring you good vibes!
+
+---
+### Privacy Policy:
+[Pokefollower Privacy Policy.pdf](https://github.com/user-attachments/files/25349405/Pokefollower.Privacy.Policy.pdf)
+
