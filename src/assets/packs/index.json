@@ -1003,6 +1003,42 @@
     {
       "id": "retro/gen-2/251-celebi",
       "name": "251-Celebi"
+    },
+    {
+      "id": "retro/gen-3/252-treecko",
+      "name": "252-Treecko"
+    },
+    {
+      "id": "retro/gen-3/253-grovyle",
+      "name": "253-Grovyle"
+    },
+    {
+      "id": "retro/gen-3/254-sceptile",
+      "name": "254-Sceptile"
+    },
+    {
+      "id": "retro/gen-3/255-torchic",
+      "name": "255-Torchic"
+    },
+    {
+      "id": "retro/gen-3/256-combusken",
+      "name": "256-Combusken"
+    },
+    {
+      "id": "retro/gen-3/257-blaziken",
+      "name": "257-Blaziken"
+    },
+    {
+      "id": "retro/gen-3/258-mudkip",
+      "name": "258-Mudkip"
+    },
+    {
+      "id": "retro/gen-3/259-marshtomp",
+      "name": "259-Marshtomp"
+    },
+    {
+      "id": "retro/gen-3/260-swampert",
+      "name": "260-Swampert"
     }
   ]
 }
