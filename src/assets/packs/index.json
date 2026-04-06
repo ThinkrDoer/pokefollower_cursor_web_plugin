@@ -1039,6 +1039,42 @@
     {
       "id": "retro/gen-3/260-swampert",
       "name": "260-Swampert"
+    },
+    {
+      "id": "retro/gen-3/261-poochyena",
+      "name": "261-Poochyena"
+    },
+    {
+      "id": "retro/gen-3/262-mightyena",
+      "name": "262-Mightyena"
+    },
+    {
+      "id": "retro/gen-3/263-zigzagoon",
+      "name": "263-Zigzagoon"
+    },
+    {
+      "id": "retro/gen-3/264-linoone",
+      "name": "264-Linoone"
+    },
+    {
+      "id": "retro/gen-3/265-wurmple",
+      "name": "265-Wurmple"
+    },
+    {
+      "id": "retro/gen-3/266-silcoon",
+      "name": "266-Silcoon"
+    },
+    {
+      "id": "retro/gen-3/267-beautifly",
+      "name": "267-Beautifly"
+    },
+    {
+      "id": "retro/gen-3/268-cascoon",
+      "name": "268-Cascoon"
+    },
+    {
+      "id": "retro/gen-3/269-dustox",
+      "name": "269-Dustox"
     }
   ]
 }

@@ -90,6 +90,21 @@ function durationsFor(anim) {
   return list.map(d => Number(d)).filter(n => Number.isFinite(n) && n > 0);
 }
 
+function resolveCopy(anim) {
+  let cur = anim;
+  const seen = new Set();
+  while (cur?.CopyOf) {
+    const name = String(cur.CopyOf || '').trim();
+    const key = name.toLowerCase();
+    if (!name || seen.has(key)) break;
+    seen.add(key);
+    const next = anims.find(a => String(a.Name || '').toLowerCase() === key);
+    if (!next) break;
+    cur = next;
+  }
+  return cur || anim;
+}
+
 function framesFrom(anim, grid) {
   const durs = durationsFor(anim);
   if (durs.length) return durs.length;
@@ -147,10 +162,11 @@ function buildRows(base, maxRows) {
 
 function createState({ anim, fileRel, rowBase, fpsArg, fallbackFps }) {
   if (!anim) return null;
-  const frame = frameSize(anim);
+  const resolved = resolveCopy(anim);
+  const frame = frameSize(resolved);
   const grid = sheetInfo(fileRel, frame);
-  const frames = framesFrom(anim, grid);
-  const fps = fpsFrom(anim, fpsArg, fallbackFps);
+  const frames = framesFrom(resolved, grid);
+  const fps = fpsFrom(resolved, fpsArg, fallbackFps);
   return {
     sheet: path.basename(fileRel),
     frame,
