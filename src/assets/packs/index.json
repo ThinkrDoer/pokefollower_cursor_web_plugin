@@ -1075,6 +1075,46 @@
     {
       "id": "retro/gen-3/269-dustox",
       "name": "269-Dustox"
+    },
+    {
+      "id": "retro/gen-3/270-lotad",
+      "name": "270-Lotad"
+    },
+    {
+      "id": "retro/gen-3/271-lombre",
+      "name": "271-Lombre"
+    },
+    {
+      "id": "retro/gen-3/272-ludicolo",
+      "name": "272-Ludicolo"
+    },
+    {
+      "id": "retro/gen-3/273-seedot",
+      "name": "273-Seedot"
+    },
+    {
+      "id": "retro/gen-3/274-nuzleaf",
+      "name": "274-Nuzleaf"
+    },
+    {
+      "id": "retro/gen-3/275-shiftry",
+      "name": "275-Shiftry"
+    },
+    {
+      "id": "retro/gen-3/276-taillow",
+      "name": "276-Taillow"
+    },
+    {
+      "id": "retro/gen-3/277-swellow",
+      "name": "277-Swellow"
+    },
+    {
+      "id": "retro/gen-3/278-wingull",
+      "name": "278-Wingull"
+    },
+    {
+      "id": "retro/gen-3/279-pelipper",
+      "name": "279-Pelipper"
     }
   ]
 }
