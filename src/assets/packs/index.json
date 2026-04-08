@@ -1115,6 +1115,46 @@
     {
       "id": "retro/gen-3/279-pelipper",
       "name": "279-Pelipper"
+    },
+    {
+      "id": "retro/gen-3/280-ralts",
+      "name": "280-Ralts"
+    },
+    {
+      "id": "retro/gen-3/281-kirlia",
+      "name": "281-Kirlia"
+    },
+    {
+      "id": "retro/gen-3/282-gardevoir",
+      "name": "282-Gardevoir"
+    },
+    {
+      "id": "retro/gen-3/283-surskit",
+      "name": "283-Surskit"
+    },
+    {
+      "id": "retro/gen-3/284-masquerain",
+      "name": "284-Masquerain"
+    },
+    {
+      "id": "retro/gen-3/285-shroomish",
+      "name": "285-Shroomish"
+    },
+    {
+      "id": "retro/gen-3/286-breloom",
+      "name": "286-Breloom"
+    },
+    {
+      "id": "retro/gen-3/287-slakoth",
+      "name": "287-Slakoth"
+    },
+    {
+      "id": "retro/gen-3/288-vigoroth",
+      "name": "288-Vigoroth"
+    },
+    {
+      "id": "retro/gen-3/289-slaking",
+      "name": "289-Slaking"
     }
   ]
 }
