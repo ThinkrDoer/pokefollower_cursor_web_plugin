@@ -1155,6 +1155,46 @@
     {
       "id": "retro/gen-3/289-slaking",
       "name": "289-Slaking"
+    },
+    {
+      "id": "retro/gen-3/290-nincada",
+      "name": "290-Nincada"
+    },
+    {
+      "id": "retro/gen-3/291-ninjask",
+      "name": "291-Ninjask"
+    },
+    {
+      "id": "retro/gen-3/292-shedinja",
+      "name": "292-Shedinja"
+    },
+    {
+      "id": "retro/gen-3/293-whismur",
+      "name": "293-Whismur"
+    },
+    {
+      "id": "retro/gen-3/294-loudred",
+      "name": "294-Loudred"
+    },
+    {
+      "id": "retro/gen-3/295-exploud",
+      "name": "295-Exploud"
+    },
+    {
+      "id": "retro/gen-3/296-makuhita",
+      "name": "296-Makuhita"
+    },
+    {
+      "id": "retro/gen-3/297-hariyama",
+      "name": "297-Hariyama"
+    },
+    {
+      "id": "retro/gen-3/298-azurill",
+      "name": "298-Azurill"
+    },
+    {
+      "id": "retro/gen-3/299-nosepass",
+      "name": "299-Nosepass"
     }
   ]
 }
