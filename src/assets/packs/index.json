@@ -1195,6 +1195,42 @@
     {
       "id": "retro/gen-3/299-nosepass",
       "name": "299-Nosepass"
+    },
+    {
+      "id": "retro/gen-3/300-skitty",
+      "name": "300-Skitty"
+    },
+    {
+      "id": "retro/gen-3/301-delcatty",
+      "name": "301-Delcatty"
+    },
+    {
+      "id": "retro/gen-3/302-sableye",
+      "name": "302-Sableye"
+    },
+    {
+      "id": "retro/gen-3/303-mawile",
+      "name": "303-Mawile"
+    },
+    {
+      "id": "retro/gen-3/304-aron",
+      "name": "304-Aron"
+    },
+    {
+      "id": "retro/gen-3/305-lairon",
+      "name": "305-Lairon"
+    },
+    {
+      "id": "retro/gen-3/306-aggron",
+      "name": "306-Aggron"
+    },
+    {
+      "id": "retro/gen-3/307-meditite",
+      "name": "307-Meditite"
+    },
+    {
+      "id": "retro/gen-3/308-medicham",
+      "name": "308-Medicham"
     }
   ]
 }
