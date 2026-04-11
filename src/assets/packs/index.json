@@ -1231,6 +1231,42 @@
     {
       "id": "retro/gen-3/308-medicham",
       "name": "308-Medicham"
+    },
+    {
+      "id": "retro/gen-3/309-electrike",
+      "name": "309-Electrike"
+    },
+    {
+      "id": "retro/gen-3/310-manectric",
+      "name": "310-Manectric"
+    },
+    {
+      "id": "retro/gen-3/311-plusle",
+      "name": "311-Plusle"
+    },
+    {
+      "id": "retro/gen-3/312-minun",
+      "name": "312-Minun"
+    },
+    {
+      "id": "retro/gen-3/313-volbeat",
+      "name": "313-Volbeat"
+    },
+    {
+      "id": "retro/gen-3/314-illumise",
+      "name": "314-Illumise"
+    },
+    {
+      "id": "retro/gen-3/315-roselia",
+      "name": "315-Roselia"
+    },
+    {
+      "id": "retro/gen-3/316-gulpin",
+      "name": "316-Gulpin"
+    },
+    {
+      "id": "retro/gen-3/317-swalot",
+      "name": "317-Swalot"
     }
   ]
 }
