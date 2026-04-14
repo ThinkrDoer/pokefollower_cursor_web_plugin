@@ -1267,6 +1267,38 @@
     {
       "id": "retro/gen-3/317-swalot",
       "name": "317-Swalot"
+    },
+    {
+      "id": "retro/gen-3/318-carvanha",
+      "name": "318-Carvanha"
+    },
+    {
+      "id": "retro/gen-3/319-sharpedo",
+      "name": "319-Sharpedo"
+    },
+    {
+      "id": "retro/gen-3/320-wailmer",
+      "name": "320-Wailmer"
+    },
+    {
+      "id": "retro/gen-3/321-wailord",
+      "name": "321-Wailord"
+    },
+    {
+      "id": "retro/gen-3/323-camerupt",
+      "name": "323-Camerupt"
+    },
+    {
+      "id": "retro/gen-3/324-torkoal",
+      "name": "324-Torkoal"
+    },
+    {
+      "id": "retro/gen-3/325-spoink",
+      "name": "325-Spoink"
+    },
+    {
+      "id": "retro/gen-3/326-grumpig",
+      "name": "326-Grumpig"
     }
   ]
 }
