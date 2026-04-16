@@ -1303,6 +1303,46 @@
     {
       "id": "retro/gen-3/326-grumpig",
       "name": "326-Grumpig"
+    },
+    {
+      "id": "retro/gen-3/327-spinda",
+      "name": "327-Spinda"
+    },
+    {
+      "id": "retro/gen-3/328-trapinch",
+      "name": "328-Trapinch"
+    },
+    {
+      "id": "retro/gen-3/329-vibrava",
+      "name": "329-Vibrava"
+    },
+    {
+      "id": "retro/gen-3/330-flygon",
+      "name": "330-Flygon"
+    },
+    {
+      "id": "retro/gen-3/331-cacnea",
+      "name": "331-Cacnea"
+    },
+    {
+      "id": "retro/gen-3/332-cacturne",
+      "name": "332-Cacturne"
+    },
+    {
+      "id": "retro/gen-3/333-swablu",
+      "name": "333-Swablu"
+    },
+    {
+      "id": "retro/gen-3/334-altaria",
+      "name": "334-Altaria"
+    },
+    {
+      "id": "retro/gen-3/335-zangoose",
+      "name": "335-Zangoose"
+    },
+    {
+      "id": "retro/gen-3/336-seviper",
+      "name": "336-Seviper"
     }
   ]
 }
