@@ -126,34 +126,35 @@ def find_zip(dex_num, name):
 
 
 def extract_sprites(zip_path, dex_num, name):
-    """Extract the 4 needed files from zip into a temp folder."""
+    """Extract ALL files from zip into temp folder, flattening subdirs."""
     dex, _ = dex_padded(dex_num)
     extract_to = TEMP / f"{dex}-{name}"
     extract_to.mkdir(parents=True, exist_ok=True)
 
-    needed = ["AnimData.xml", "Idle-Anim.png", "Sleep-Anim.png", "Walk-Anim.png"]
-
     with zipfile.ZipFile(zip_path, 'r') as zf:
-        all_files = zf.namelist()
-        for filename in needed:
-            matches = [f for f in all_files if f.endswith(filename)]
-            if not matches:
-                err(f"'{filename}' not found in zip for {dex}-{name}")
-            zf.extract(matches[0], extract_to)
-            extracted = extract_to / matches[0]
+        for member in zf.namelist():
+            if member.endswith('/'):
+                continue
+            filename = Path(member).name
+            zf.extract(member, extract_to)
+            extracted = extract_to / member
             dest = extract_to / filename
             if str(extracted) != str(dest):
                 shutil.move(str(extracted), str(dest))
-                # Clean up empty subdirs from zip structure
-                try:
-                    extracted.parent.rmdir()
-                except Exception:
-                    pass
 
-    log("Extracted 4 files from zip")
+    # Remove leftover empty subdirs from zip structure
+    for item in list(extract_to.iterdir()):
+        if item.is_dir():
+            shutil.rmtree(item, ignore_errors=True)
+
+    # Verify the 4 critical files are present
+    for needed in ["AnimData.xml", "Idle-Anim.png", "Sleep-Anim.png", "Walk-Anim.png"]:
+        if not (extract_to / needed).exists():
+            err(f"'{needed}' not found in zip for {dex}-{name}")
+
+    count = len(list(extract_to.iterdir()))
+    log(f"Extracted all zip contents ({count} files)")
     return extract_to
-
-
 def convert_to_webp(folder, png_name):
     """Convert PNG to lossless WebP, remove original."""
     try:
@@ -233,13 +234,26 @@ def process_pokemon(dex_num, name, gen):
     for png in ["Idle-Anim.png", "Sleep-Anim.png", "Walk-Anim.png"]:
         convert_to_webp(temp_dir, png)
 
-    # Archive to PROJECTS: processed/Gen X/{dex}-{name} sprite/in use/
-    archive_dir = PROCESSED / gen_folder(gen) / f"{mon} sprite" / "in use"
+    # Archive to PROJECTS: processed/Gen X/{dex}-{name} sprite/
+    # - All raw zip contents go in the sprite folder
+    # - Processed files (webp + xml + cover) go in the in use/ subfolder
+    sprite_dir = PROCESSED / gen_folder(gen) / f"{mon} sprite"
+    sprite_dir.mkdir(parents=True, exist_ok=True)
+    archive_dir = sprite_dir / "in use"
     archive_dir.mkdir(parents=True, exist_ok=True)
+
+    # Copy all extracted files into sprite folder (the full raw set)
+    for f in temp_dir.iterdir():
+        shutil.copy2(f, sprite_dir / f.name)
+
+    # Copy cover PNG into sprite folder too
+    shutil.copy2(cover_png, sprite_dir / cover_png.name)
+
+    # Copy processed files into in use/
     shutil.copy2(cover_png, archive_dir / cover_png.name)
     for f in ["AnimData.xml", "Idle-Anim.webp", "Sleep-Anim.webp", "Walk-Anim.webp"]:
         shutil.copy2(temp_dir / f, archive_dir / f)
-    ok(f"Archived 5 files -> PROJECTS/processed/Gen {gen}/{mon} sprite/in use/")
+    ok(f"Archived to PROJECTS/processed/Gen {gen}/{mon} sprite/ (+ in use/)")
 
     # Copy to VS Code raw folder
     raw_dir = VSCODE_RAW / g / mon
@@ -255,12 +269,10 @@ def process_pokemon(dex_num, name, gen):
     # Run parse-anim.js
     run_parse_anim(dex_num, name, gen)
 
-    # Clean up temp and move incoming files to processed archive
+    # Clean up temp and delete incoming source files (zip kept in sprite folder)
     shutil.rmtree(temp_dir, ignore_errors=True)
-    incoming_archive = PROCESSED / gen_folder(gen) / "_incoming_archive"
-    incoming_archive.mkdir(parents=True, exist_ok=True)
-    shutil.move(str(cover_png), str(incoming_archive / cover_png.name))
-    shutil.move(str(zip_path),  str(incoming_archive / zip_path.name))
+    cover_png.unlink(missing_ok=True)
+    zip_path.unlink(missing_ok=True)
     log("Cleaned up incoming/")
 
 
