@@ -147,10 +147,24 @@ def extract_sprites(zip_path, dex_num, name):
         if item.is_dir():
             shutil.rmtree(item, ignore_errors=True)
 
-    # Verify the 4 critical files are present
-    for needed in ["AnimData.xml", "Idle-Anim.png", "Sleep-Anim.png", "Walk-Anim.png"]:
-        if not (extract_to / needed).exists():
-            err(f"'{needed}' not found in zip for {dex}-{name}")
+    # Verify critical files, with fallbacks
+    # AnimData.xml is always required
+    if not (extract_to / "AnimData.xml").exists():
+        err(f"'AnimData.xml' not found in zip for {dex}-{name}")
+
+    # Walk-Anim is always required
+    if not (extract_to / "Walk-Anim.png").exists():
+        err(f"'Walk-Anim.png' not found in zip for {dex}-{name}")
+
+    # Idle-Anim fallback: if missing, copy Walk-Anim as Idle-Anim
+    if not (extract_to / "Idle-Anim.png").exists():
+        shutil.copy2(extract_to / "Walk-Anim.png", extract_to / "Idle-Anim.png")
+        warn(f"Idle-Anim.png missing for {dex}-{name} — using Walk-Anim.png as fallback")
+
+    # Sleep-Anim fallback: if missing, copy Idle-Anim as Sleep-Anim
+    if not (extract_to / "Sleep-Anim.png").exists():
+        shutil.copy2(extract_to / "Idle-Anim.png", extract_to / "Sleep-Anim.png")
+        warn(f"Sleep-Anim.png missing for {dex}-{name} — using Idle-Anim.png as fallback")
 
     count = len(list(extract_to.iterdir()))
     log(f"Extracted all zip contents ({count} files)")

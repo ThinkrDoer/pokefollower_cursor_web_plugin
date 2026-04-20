@@ -1351,6 +1351,38 @@
     {
       "id": "retro/gen-3/338-solrock",
       "name": "338-Solrock"
+    },
+    {
+      "id": "retro/gen-3/339-barboach",
+      "name": "339-Barboach"
+    },
+    {
+      "id": "retro/gen-3/340-whiscash",
+      "name": "340-Whiscash"
+    },
+    {
+      "id": "retro/gen-3/341-corphish",
+      "name": "341-Corphish"
+    },
+    {
+      "id": "retro/gen-3/342-crawdaunt",
+      "name": "342-Crawdaunt"
+    },
+    {
+      "id": "retro/gen-3/343-baltoy",
+      "name": "343-Baltoy"
+    },
+    {
+      "id": "retro/gen-3/344-claydol",
+      "name": "344-Claydol"
+    },
+    {
+      "id": "retro/gen-3/345-lileep",
+      "name": "345-Lileep"
+    },
+    {
+      "id": "retro/gen-3/346-cradily",
+      "name": "346-Cradily"
     }
   ]
 }
