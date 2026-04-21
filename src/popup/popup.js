@@ -1,4 +1,4 @@
-const DEFAULT_PACK = "retro/gen-1/009-blastoise";
+const DEFAULT_PACK = "retro/gen-1/001-bulbasaur";
 
 document.addEventListener("DOMContentLoaded", () => {
   const enabledEl = document.getElementById("enabled");
