@@ -1431,6 +1431,118 @@
     {
       "id": "retro/gen-3/358-chimecho",
       "name": "358-Chimecho"
+    },
+    {
+      "id": "retro/gen-3/359-absol",
+      "name": "359-Absol"
+    },
+    {
+      "id": "retro/gen-3/360-wynaut",
+      "name": "360-Wynaut"
+    },
+    {
+      "id": "retro/gen-3/361-snorunt",
+      "name": "361-Snorunt"
+    },
+    {
+      "id": "retro/gen-3/362-glalie",
+      "name": "362-Glalie"
+    },
+    {
+      "id": "retro/gen-3/363-spheal",
+      "name": "363-Spheal"
+    },
+    {
+      "id": "retro/gen-3/364-sealeo",
+      "name": "364-Sealeo"
+    },
+    {
+      "id": "retro/gen-3/365-walrein",
+      "name": "365-Walrein"
+    },
+    {
+      "id": "retro/gen-3/366-clamperl",
+      "name": "366-Clamperl"
+    },
+    {
+      "id": "retro/gen-3/367-huntail",
+      "name": "367-Huntail"
+    },
+    {
+      "id": "retro/gen-3/368-gorebyss",
+      "name": "368-Gorebyss"
+    },
+    {
+      "id": "retro/gen-3/369-relicanth",
+      "name": "369-Relicanth"
+    },
+    {
+      "id": "retro/gen-3/370-luvdisc",
+      "name": "370-Luvdisc"
+    },
+    {
+      "id": "retro/gen-3/371-bagon",
+      "name": "371-Bagon"
+    },
+    {
+      "id": "retro/gen-3/372-shelgon",
+      "name": "372-Shelgon"
+    },
+    {
+      "id": "retro/gen-3/373-salamence",
+      "name": "373-Salamence"
+    },
+    {
+      "id": "retro/gen-3/374-beldum",
+      "name": "374-Beldum"
+    },
+    {
+      "id": "retro/gen-3/375-metang",
+      "name": "375-Metang"
+    },
+    {
+      "id": "retro/gen-3/376-metagross",
+      "name": "376-Metagross"
+    },
+    {
+      "id": "retro/gen-3/377-regirock",
+      "name": "377-Regirock"
+    },
+    {
+      "id": "retro/gen-3/378-regice",
+      "name": "378-Regice"
+    },
+    {
+      "id": "retro/gen-3/379-registeel",
+      "name": "379-Registeel"
+    },
+    {
+      "id": "retro/gen-3/380-latias",
+      "name": "380-Latias"
+    },
+    {
+      "id": "retro/gen-3/381-latios",
+      "name": "381-Latios"
+    },
+    {
+      "id": "retro/gen-3/382-kyogre",
+      "name": "382-Kyogre"
+    },
+    {
+      "id": "retro/gen-3/383-groudon",
+      "name": "383-Groudon"
+    },
+    {
+      "id": "retro/gen-3/384-rayquaza",
+      "name": "384-Rayquaza"
+    },
+    {
+      "id": "retro/gen-3/385-jirachi",
+      "name": "385-Jirachi"
+    },
+    {
+      "id": "retro/gen-3/386-deoxys",
+      "name": "386-Deoxys"
     }
   ]
 }
