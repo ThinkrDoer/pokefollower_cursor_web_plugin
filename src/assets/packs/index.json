@@ -1383,6 +1383,54 @@
     {
       "id": "retro/gen-3/346-cradily",
       "name": "346-Cradily"
+    },
+    {
+      "id": "retro/gen-3/347-anorith",
+      "name": "347-Anorith"
+    },
+    {
+      "id": "retro/gen-3/348-armaldo",
+      "name": "348-Armaldo"
+    },
+    {
+      "id": "retro/gen-3/349-feebas",
+      "name": "349-Feebas"
+    },
+    {
+      "id": "retro/gen-3/350-milotic",
+      "name": "350-Milotic"
+    },
+    {
+      "id": "retro/gen-3/351-castform",
+      "name": "351-Castform"
+    },
+    {
+      "id": "retro/gen-3/352-kecleon",
+      "name": "352-Kecleon"
+    },
+    {
+      "id": "retro/gen-3/353-shuppet",
+      "name": "353-Shuppet"
+    },
+    {
+      "id": "retro/gen-3/354-banette",
+      "name": "354-Banette"
+    },
+    {
+      "id": "retro/gen-3/355-duskull",
+      "name": "355-Duskull"
+    },
+    {
+      "id": "retro/gen-3/356-dusclops",
+      "name": "356-Dusclops"
+    },
+    {
+      "id": "retro/gen-3/357-tropius",
+      "name": "357-Tropius"
+    },
+    {
+      "id": "retro/gen-3/358-chimecho",
+      "name": "358-Chimecho"
     }
   ]
 }
