@@ -698,7 +698,7 @@
     },
     {
       "id": "retro/gen-2/175-togepi",
-      "name": "175-Togepi"
+      "name": "175-Togepi (Kats Fave)"
     },
     {
       "id": "retro/gen-2/176-togetic",
@@ -1579,6 +1579,46 @@
     {
       "id": "retro/gen-4/395-empoleon",
       "name": "395-Empoleon"
+    },
+    {
+      "id": "retro/gen-4/396-starly",
+      "name": "396-Starly"
+    },
+    {
+      "id": "retro/gen-4/397-staravia",
+      "name": "397-Staravia"
+    },
+    {
+      "id": "retro/gen-4/398-staraptor",
+      "name": "398-Staraptor"
+    },
+    {
+      "id": "retro/gen-4/399-bidoof",
+      "name": "399-Bidoof"
+    },
+    {
+      "id": "retro/gen-4/400-bibarel",
+      "name": "400-Bibarel"
+    },
+    {
+      "id": "retro/gen-4/401-kricketot",
+      "name": "401-Kricketot"
+    },
+    {
+      "id": "retro/gen-4/402-kricketune",
+      "name": "402-Kricketune"
+    },
+    {
+      "id": "retro/gen-4/403-shinx",
+      "name": "403-Shinx"
+    },
+    {
+      "id": "retro/gen-4/404-luxio",
+      "name": "404-Luxio"
+    },
+    {
+      "id": "retro/gen-4/405-luxray",
+      "name": "405-Luxray"
     }
   ]
 }
