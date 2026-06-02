@@ -1543,6 +1543,18 @@
     {
       "id": "retro/gen-3/386-deoxys",
       "name": "386-Deoxys"
+    },
+    {
+      "id": "retro/gen-4/387-turtwig",
+      "name": "387-Turtwig"
+    },
+    {
+      "id": "retro/gen-4/388-grotle",
+      "name": "388-Grotle"
+    },
+    {
+      "id": "retro/gen-4/389-torterra",
+      "name": "389-Torterra"
     }
   ]
 }
