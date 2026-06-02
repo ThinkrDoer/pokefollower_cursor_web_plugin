@@ -1555,6 +1555,30 @@
     {
       "id": "retro/gen-4/389-torterra",
       "name": "389-Torterra"
+    },
+    {
+      "id": "retro/gen-4/390-chimchar",
+      "name": "390-Chimchar"
+    },
+    {
+      "id": "retro/gen-4/391-monferno",
+      "name": "391-Monferno"
+    },
+    {
+      "id": "retro/gen-4/392-infernape",
+      "name": "392-Infernape"
+    },
+    {
+      "id": "retro/gen-4/393-piplup",
+      "name": "393-Piplup"
+    },
+    {
+      "id": "retro/gen-4/394-prinplup",
+      "name": "394-Prinplup"
+    },
+    {
+      "id": "retro/gen-4/395-empoleon",
+      "name": "395-Empoleon"
     }
   ]
 }
