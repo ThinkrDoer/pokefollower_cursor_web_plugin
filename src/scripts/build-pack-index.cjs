@@ -8,7 +8,8 @@ const path = require("path");
 const ROOT = process.cwd();
 const PACKS_DIR = path.join(ROOT, "src", "assets", "packs");
 const RETRO_DIR = path.join(PACKS_DIR, "retro");
-const OUT_FILE  = path.join(PACKS_DIR, "index.json");
+const OUT_FILE       = path.join(PACKS_DIR, "index.json");
+const OVERRIDES_FILE = path.join(PACKS_DIR, "name-overrides.json");
 
 // Helpers
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
@@ -54,11 +55,15 @@ function main() {
     process.exit(1);
   }
 
+  const overrides = fs.existsSync(OVERRIDES_FILE)
+    ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, "utf8"))
+    : {};
+
   const rawEntries = collectPackFiles(RETRO_DIR);
   const entries = rawEntries
     .map(({ id, slug }) => ({
       id,
-      name: labelFromSlug(slug),
+      name: overrides[id] ?? labelFromSlug(slug),
       dex: dexFromSlug(slug)
     }))
     .sort((a, b) => a.dex - b.dex)

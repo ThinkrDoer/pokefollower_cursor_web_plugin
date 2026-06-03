@@ -1619,6 +1619,358 @@
     {
       "id": "retro/gen-4/405-luxray",
       "name": "405-Luxray"
+    },
+    {
+      "id": "retro/gen-4/406-budew",
+      "name": "406-Budew"
+    },
+    {
+      "id": "retro/gen-4/407-roserade",
+      "name": "407-Roserade"
+    },
+    {
+      "id": "retro/gen-4/408-cranidos",
+      "name": "408-Cranidos"
+    },
+    {
+      "id": "retro/gen-4/409-rampardos",
+      "name": "409-Rampardos"
+    },
+    {
+      "id": "retro/gen-4/410-shieldon",
+      "name": "410-Shieldon"
+    },
+    {
+      "id": "retro/gen-4/411-bastiodon",
+      "name": "411-Bastiodon"
+    },
+    {
+      "id": "retro/gen-4/412-burmy",
+      "name": "412-Burmy"
+    },
+    {
+      "id": "retro/gen-4/413-wormadam",
+      "name": "413-Wormadam"
+    },
+    {
+      "id": "retro/gen-4/414-mothim",
+      "name": "414-Mothim"
+    },
+    {
+      "id": "retro/gen-4/415-combee",
+      "name": "415-Combee"
+    },
+    {
+      "id": "retro/gen-4/416-vespiquen",
+      "name": "416-Vespiquen"
+    },
+    {
+      "id": "retro/gen-4/417-pachirisu",
+      "name": "417-Pachirisu"
+    },
+    {
+      "id": "retro/gen-4/418-buizel",
+      "name": "418-Buizel"
+    },
+    {
+      "id": "retro/gen-4/419-floatzel",
+      "name": "419-Floatzel"
+    },
+    {
+      "id": "retro/gen-4/420-cherubi",
+      "name": "420-Cherubi"
+    },
+    {
+      "id": "retro/gen-4/421-cherrim",
+      "name": "421-Cherrim"
+    },
+    {
+      "id": "retro/gen-4/422-shellos",
+      "name": "422-Shellos"
+    },
+    {
+      "id": "retro/gen-4/423-gastrodon",
+      "name": "423-Gastrodon"
+    },
+    {
+      "id": "retro/gen-4/424-ambipom",
+      "name": "424-Ambipom"
+    },
+    {
+      "id": "retro/gen-4/425-drifloon",
+      "name": "425-Drifloon"
+    },
+    {
+      "id": "retro/gen-4/426-drifblim",
+      "name": "426-Drifblim"
+    },
+    {
+      "id": "retro/gen-4/427-buneary",
+      "name": "427-Buneary"
+    },
+    {
+      "id": "retro/gen-4/428-lopunny",
+      "name": "428-Lopunny"
+    },
+    {
+      "id": "retro/gen-4/429-mismagius",
+      "name": "429-Mismagius"
+    },
+    {
+      "id": "retro/gen-4/430-honchkrow",
+      "name": "430-Honchkrow"
+    },
+    {
+      "id": "retro/gen-4/431-glameow",
+      "name": "431-Glameow"
+    },
+    {
+      "id": "retro/gen-4/432-purugly",
+      "name": "432-Purugly"
+    },
+    {
+      "id": "retro/gen-4/433-chingling",
+      "name": "433-Chingling"
+    },
+    {
+      "id": "retro/gen-4/434-stunky",
+      "name": "434-Stunky"
+    },
+    {
+      "id": "retro/gen-4/435-skuntank",
+      "name": "435-Skuntank"
+    },
+    {
+      "id": "retro/gen-4/436-bronzor",
+      "name": "436-Bronzor"
+    },
+    {
+      "id": "retro/gen-4/437-bronzong",
+      "name": "437-Bronzong"
+    },
+    {
+      "id": "retro/gen-4/438-bonsly",
+      "name": "438-Bonsly"
+    },
+    {
+      "id": "retro/gen-4/439-mime-jr",
+      "name": "439-Mime-Jr"
+    },
+    {
+      "id": "retro/gen-4/440-happiny",
+      "name": "440-Happiny"
+    },
+    {
+      "id": "retro/gen-4/441-chatot",
+      "name": "441-Chatot"
+    },
+    {
+      "id": "retro/gen-4/442-spiritomb",
+      "name": "442-Spiritomb"
+    },
+    {
+      "id": "retro/gen-4/443-gible",
+      "name": "443-Gible"
+    },
+    {
+      "id": "retro/gen-4/444-gabite",
+      "name": "444-Gabite"
+    },
+    {
+      "id": "retro/gen-4/445-garchomp",
+      "name": "445-Garchomp"
+    },
+    {
+      "id": "retro/gen-4/446-munchlax",
+      "name": "446-Munchlax"
+    },
+    {
+      "id": "retro/gen-4/447-riolu",
+      "name": "447-Riolu"
+    },
+    {
+      "id": "retro/gen-4/448-lucario",
+      "name": "448-Lucario"
+    },
+    {
+      "id": "retro/gen-4/449-hippopotas",
+      "name": "449-Hippopotas"
+    },
+    {
+      "id": "retro/gen-4/450-hippowdon",
+      "name": "450-Hippowdon"
+    },
+    {
+      "id": "retro/gen-4/451-skorupi",
+      "name": "451-Skorupi"
+    },
+    {
+      "id": "retro/gen-4/452-drapion",
+      "name": "452-Drapion"
+    },
+    {
+      "id": "retro/gen-4/453-croagunk",
+      "name": "453-Croagunk"
+    },
+    {
+      "id": "retro/gen-4/454-toxicroak",
+      "name": "454-Toxicroak"
+    },
+    {
+      "id": "retro/gen-4/455-carnivine",
+      "name": "455-Carnivine"
+    },
+    {
+      "id": "retro/gen-4/456-finneon",
+      "name": "456-Finneon"
+    },
+    {
+      "id": "retro/gen-4/457-lumineon",
+      "name": "457-Lumineon"
+    },
+    {
+      "id": "retro/gen-4/458-mantyke",
+      "name": "458-Mantyke"
+    },
+    {
+      "id": "retro/gen-4/459-snover",
+      "name": "459-Snover"
+    },
+    {
+      "id": "retro/gen-4/460-abomasnow",
+      "name": "460-Abomasnow"
+    },
+    {
+      "id": "retro/gen-4/461-weavile",
+      "name": "461-Weavile"
+    },
+    {
+      "id": "retro/gen-4/462-magnezone",
+      "name": "462-Magnezone"
+    },
+    {
+      "id": "retro/gen-4/463-lickilicky",
+      "name": "463-Lickilicky"
+    },
+    {
+      "id": "retro/gen-4/464-rhyperior",
+      "name": "464-Rhyperior"
+    },
+    {
+      "id": "retro/gen-4/465-tangrowth",
+      "name": "465-Tangrowth"
+    },
+    {
+      "id": "retro/gen-4/466-electivire",
+      "name": "466-Electivire"
+    },
+    {
+      "id": "retro/gen-4/467-magmortar",
+      "name": "467-Magmortar"
+    },
+    {
+      "id": "retro/gen-4/468-togekiss",
+      "name": "468-Togekiss"
+    },
+    {
+      "id": "retro/gen-4/469-yanmega",
+      "name": "469-Yanmega"
+    },
+    {
+      "id": "retro/gen-4/470-leafeon",
+      "name": "470-Leafeon"
+    },
+    {
+      "id": "retro/gen-4/471-glaceon",
+      "name": "471-Glaceon"
+    },
+    {
+      "id": "retro/gen-4/472-gliscor",
+      "name": "472-Gliscor"
+    },
+    {
+      "id": "retro/gen-4/473-mamoswine",
+      "name": "473-Mamoswine"
+    },
+    {
+      "id": "retro/gen-4/474-porygon-z",
+      "name": "474-Porygon-Z"
+    },
+    {
+      "id": "retro/gen-4/475-gallade",
+      "name": "475-Gallade"
+    },
+    {
+      "id": "retro/gen-4/476-probopass",
+      "name": "476-Probopass"
+    },
+    {
+      "id": "retro/gen-4/477-dusknoir",
+      "name": "477-Dusknoir"
+    },
+    {
+      "id": "retro/gen-4/478-froslass",
+      "name": "478-Froslass"
+    },
+    {
+      "id": "retro/gen-4/479-rotom",
+      "name": "479-Rotom"
+    },
+    {
+      "id": "retro/gen-4/480-uxie",
+      "name": "480-Uxie"
+    },
+    {
+      "id": "retro/gen-4/481-mesprit",
+      "name": "481-Mesprit"
+    },
+    {
+      "id": "retro/gen-4/482-azelf",
+      "name": "482-Azelf"
+    },
+    {
+      "id": "retro/gen-4/483-dialga",
+      "name": "483-Dialga"
+    },
+    {
+      "id": "retro/gen-4/484-palkia",
+      "name": "484-Palkia"
+    },
+    {
+      "id": "retro/gen-4/485-heatran",
+      "name": "485-Heatran"
+    },
+    {
+      "id": "retro/gen-4/486-regigigas",
+      "name": "486-Regigigas"
+    },
+    {
+      "id": "retro/gen-4/487-giratina",
+      "name": "487-Giratina"
+    },
+    {
+      "id": "retro/gen-4/488-cresselia",
+      "name": "488-Cresselia"
+    },
+    {
+      "id": "retro/gen-4/489-phione",
+      "name": "489-Phione"
+    },
+    {
+      "id": "retro/gen-4/490-manaphy",
+      "name": "490-Manaphy"
+    },
+    {
+      "id": "retro/gen-4/491-darkrai",
+      "name": "491-Darkrai"
+    },
+    {
+      "id": "retro/gen-4/492-shaymin",
+      "name": "492-Shaymin"
+    },
+    {
+      "id": "retro/gen-4/493-arceus",
+      "name": "493-Arceus"
     }
   ]
 }
