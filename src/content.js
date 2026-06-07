@@ -20,17 +20,19 @@ const RUNTIME = {
   lastMouse: { x: 0, y: 0, t: 0 },
 
   // position/target and smoothed velocity
-  pos:    { x: 0, y: 0 },
-  target: { x: 0, y: 0 },
-  velAvg: { x: 0, y: 0 },
-  speedAvg: 0,
-
-  // keep legacy field in sync for pickStateBySpeed()
-  speedPxPerSec: 0
+  pos:       { x: 0, y: 0 },
+  target:    { x: 0, y: 0 },
+  offsetDir:    { x: 0, y: -1 }, // lerped unit vector for idle→walk glide (perch placement)
+  isWalking:    false,           // true while the follower is actively walking toward its target
+  pendingState: null,             // { name, queuedAt } — deferred state switch
+  velAvg:    { x: 0, y: 0 },
+  speedAvg:  0
 };
 
 // --- behavior thresholds ---
 const SLEEP_TIMEOUT_MS = 30000; // 30s of no movement -> sleep
+const ARRIVE_RADIUS_PX = 6;     // close enough to target to call it "arrived" and settle into idle
+const SLOW_RADIUS_PX   = 60;    // ease walking speed down within this distance for a soft landing
 
 function hasState(name) {
   return !!(RUNTIME.meta && RUNTIME.meta.states && RUNTIME.meta.states[name]);
@@ -45,6 +47,19 @@ function applyConfigPatch(obj = {}) {
   if (typeof obj.vcp1_scale  === "number" && !Number.isNaN(obj.vcp1_scale))  CONFIG.scale  = obj.vcp1_scale;
   if (typeof obj.vcp1_offset === "number" && !Number.isNaN(obj.vcp1_offset)) CONFIG.offset = obj.vcp1_offset;
   if (typeof obj.vcp1_lerp   === "number" && !Number.isNaN(obj.vcp1_lerp))   CONFIG.lerp   = obj.vcp1_lerp;
+}
+
+// Map the popup's "SPEED" slider (stored/transmitted as vcp1_lerp, internal range ~0.05–0.50)
+// onto a walking speed in px/s, so the follower travels at a steady, natural pace
+// instead of being eased toward a moving point (which is what produced the "leash" drag).
+const WALK_SPEED_MIN_PXPS = 80;   // px/s at the slowest "speed" setting
+const WALK_SPEED_MAX_PXPS = 640;  // px/s at the fastest "speed" setting
+const SPEED_CONFIG_MIN = 0.05;
+const SPEED_CONFIG_MAX = 0.50;
+function walkSpeedFromConfig() {
+  const t = (CONFIG.lerp - SPEED_CONFIG_MIN) / (SPEED_CONFIG_MAX - SPEED_CONFIG_MIN);
+  const clamped = Math.min(1, Math.max(0, t));
+  return WALK_SPEED_MIN_PXPS + clamped * (WALK_SPEED_MAX_PXPS - WALK_SPEED_MIN_PXPS);
 }
 
 // --- Live poller for smooth slider updates during popup drag ---
@@ -76,28 +91,31 @@ function stopLocalPoll() {
 }
 // --- follow targeting: trail the cursor when moving; perch above when idle
 function computeTarget() {
-  // If we have motion, offset backwards along the velocity vector.
-  // Otherwise, idle above the cursor.
   const speed = RUNTIME.speedAvg || 0;
-  const hasDir = speed > (typeof SPEED_IDLE !== "undefined" ? SPEED_IDLE : 40);
-
+  const hasDir = speed > 40;
   const OFFSET = CONFIG.offset;
 
-  let ox = 0, oy = -OFFSET; // idle: sit above the cursor
+  // Desired offset direction (unit vector)
+  let desiredX, desiredY;
   if (hasDir) {
-    // Use direction *opposite* motion so the sprite "trails" the cursor
-    const nx = RUNTIME.velAvg.x / (speed || 1);
-    const ny = RUNTIME.velAvg.y / (speed || 1);
-    ox = -nx * OFFSET;
-    oy = -ny * OFFSET;
+    desiredX = -(RUNTIME.velAvg.x / (speed || 1));
+    desiredY = -(RUNTIME.velAvg.y / (speed || 1));
+  } else {
+    desiredX = 0;
+    desiredY = -1; // idle: above cursor
   }
 
-  RUNTIME.target.x = (RUNTIME.lastMouse?.x || 0) + ox;
-  RUNTIME.target.y = (RUNTIME.lastMouse?.y || 0) + oy;
+  // Lerp offset direction so idle→walk transition glides instead of snapping
+  const OD_LERP = 0.08;
+  RUNTIME.offsetDir.x += (desiredX - RUNTIME.offsetDir.x) * OD_LERP;
+  RUNTIME.offsetDir.y += (desiredY - RUNTIME.offsetDir.y) * OD_LERP;
+
+  RUNTIME.target.x = (RUNTIME.lastMouse?.x || 0) + RUNTIME.offsetDir.x * OFFSET;
+  RUNTIME.target.y = (RUNTIME.lastMouse?.y || 0) + RUNTIME.offsetDir.y * OFFSET;
 }
 
-// --- 8-way facing from smoothed velocity (octants) ---
-function pickDir8FromVelocity(vx, vy) {
+// --- 8-way facing from a direction vector (octants) ---
+function pickDir8FromVector(vx, vy) {
   const dead = 0.3; // small deadzone to reduce jitter
   if (Math.abs(vx) <= dead && Math.abs(vy) <= dead) return "front";
   // DOM coords: +y is downward => vy>0 means "front"
@@ -124,8 +142,11 @@ function pickRowForState(stateName) {
   if (!st) return 0;
   const rows = st.rows || { front: 0 };
 
-  // Prefer 8-way if present, else fall back to nearest cardinal
-  const dir8 = pickDir8FromVelocity(RUNTIME.velAvg.x, RUNTIME.velAvg.y);
+  // Prefer 8-way if present, else fall back to nearest cardinal.
+  // Face based on the cursor's own direction of travel — the follower's path
+  // can lag/curve while it catches up, but it should still visibly look like
+  // it's heading toward (or alongside) the cursor, not its own catch-up route.
+  const dir8 = pickDir8FromVector(RUNTIME.velAvg.x, RUNTIME.velAvg.y);
   if (dir8 in rows) return rows[dir8];
 
   // Map diagonal to nearest cardinal if diagonal key missing
@@ -291,38 +312,55 @@ function pickStateBySpeed() {
   if (hasState("sleep") && (now - RUNTIME.lastMoveTs) > SLEEP_TIMEOUT_MS) {
     return "sleep";
   }
-  // Otherwise choose idle vs walk by recent motion
-  const idle = (now - RUNTIME.lastMoveTs) > 150 || RUNTIME.speedPxPerSec < 60;
-  return idle ? "idle" : "walk";
+  // Otherwise mirror the follower's own motion: walking while it's actually
+  // travelling toward its target, idle once it arrives — so the animation
+  // always matches what's happening on screen rather than the cursor's speed.
+  return RUNTIME.isWalking ? "walk" : "idle";
 }
 
 function tick(dtMs) {
   const desired = pickStateBySpeed();
   const nextRow = pickRowForState(desired);
-  if (desired !== RUNTIME.anim.name || nextRow !== RUNTIME.anim.row) {
-    RUNTIME.anim.name  = desired;
-    RUNTIME.anim.row   = nextRow;
-    RUNTIME.anim.frame = 0;
-    RUNTIME.anim.accMs = 0;
+  if (desired !== RUNTIME.anim.name) {
+    // Queue the switch; wait for current cycle to finish before committing
+    if (!RUNTIME.pendingState || RUNTIME.pendingState.name !== desired) {
+      RUNTIME.pendingState = { name: desired, queuedAt: performance.now() };
+    }
+    const st = RUNTIME.meta.states[RUNTIME.anim.name];
+    const atCycleEnd = RUNTIME.anim.frame >= st.frames - 1;
+    const timedOut = (performance.now() - RUNTIME.pendingState.queuedAt) > 300;
+    if (atCycleEnd || timedOut) {
+      RUNTIME.anim.name = RUNTIME.pendingState.name;
+      RUNTIME.anim.row  = pickRowForState(RUNTIME.anim.name);
+      RUNTIME.pendingState = null;
+    }
+  } else {
+    RUNTIME.pendingState = null;
   }
 
-  // follow feel: compute target and ease toward it
+  // follow feel: walk toward the target at a steady pace, like it's actually
+  // travelling there on its own — not eased/snapped toward a moving point on a
+  // leash. Direction is recomputed every frame, so it turns naturally as the
+  // target (cursor) moves, and eases to a stop on arrival instead of overshooting.
   computeTarget();
   const dx = RUNTIME.target.x - RUNTIME.pos.x;
   const dy = RUNTIME.target.y - RUNTIME.pos.y;
+  const dist = Math.hypot(dx, dy);
 
-  const LERP = CONFIG.lerp;
-  const MAX_STEP = (typeof MAX_STEP_PX !== "undefined" ? MAX_STEP_PX : 60);
+  if (dist > ARRIVE_RADIUS_PX) {
+    const walkSpeed = walkSpeedFromConfig(); // px/s
+    const speed = dist < SLOW_RADIUS_PX ? walkSpeed * (dist / SLOW_RADIUS_PX) : walkSpeed;
+    // Clamp the per-frame delta so a long frame gap (e.g. tab was backgrounded)
+    // can't teleport the follower — it just keeps walking once frames resume.
+    const moveDtMs = Math.min(dtMs, 50);
+    const moveDist = Math.min(dist, speed * (moveDtMs / 1000));
 
-  let stepX = dx * LERP;
-  let stepY = dy * LERP;
-  const stepMag = Math.hypot(stepX, stepY);
-  if (stepMag > MAX_STEP) {
-    const s = MAX_STEP / (stepMag || 1);
-    stepX *= s; stepY *= s;
+    RUNTIME.pos.x += (dx / dist) * moveDist;
+    RUNTIME.pos.y += (dy / dist) * moveDist;
+    RUNTIME.isWalking = true;
+  } else {
+    RUNTIME.isWalking = false;
   }
-  RUNTIME.pos.x += stepX;
-  RUNTIME.pos.y += stepY;
 
   const st = RUNTIME.meta.states[RUNTIME.anim.name];
   const msPerFrame = 1000 / st.fps;
@@ -364,7 +402,6 @@ function onMouseMove(e) {
   RUNTIME.velAvg.x = RUNTIME.velAvg.x * (1 - SMOOTH) + vx * SMOOTH;
   RUNTIME.velAvg.y = RUNTIME.velAvg.y * (1 - SMOOTH) + vy * SMOOTH;
   RUNTIME.speedAvg = Math.hypot(RUNTIME.velAvg.x, RUNTIME.velAvg.y);
-  RUNTIME.speedPxPerSec = RUNTIME.speedAvg;
 
   RUNTIME.lastMouse.x = e.clientX;
   RUNTIME.lastMouse.y = e.clientY;
