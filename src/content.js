@@ -160,6 +160,18 @@ function pickRowForState(stateName) {
   return (fallback in rows) ? rows[fallback] : (rows.front ?? 0);
 }
 
+// Once the extension is reloaded/updated, tabs that already had this content
+// script injected lose their connection to it — chrome.runtime.id becomes
+// undefined and any chrome.* call throws "Extension context invalidated".
+// Checking this lets us shut down quietly instead of throwing on every frame.
+function isExtensionContextValid() {
+  try {
+    return !!(chrome.runtime && chrome.runtime.id);
+  } catch (_) {
+    return false;
+  }
+}
+
 function extUrl(rel) { return chrome.runtime.getURL(rel); }
 
 function createFollower() {
@@ -377,9 +389,23 @@ function tick(dtMs) {
   applyFrame();
 }
 
+// Cleanly stop everything once the extension context has been invalidated
+// (e.g. the extension was reloaded/updated while this page stayed open).
+// No more chrome.* calls will work here, so just remove our DOM/listeners.
+function teardownInvalidatedContext() {
+  window.removeEventListener("mousemove", onMouseMove);
+  stopLocalPoll();
+  removeFollower();
+  running = false;
+}
+
 function loop() {
   let last = performance.now();
   const step = () => {
+    if (!isExtensionContextValid()) {
+      teardownInvalidatedContext();
+      return;
+    }
     const now = performance.now();
     const dt = now - last;
     last = now;
