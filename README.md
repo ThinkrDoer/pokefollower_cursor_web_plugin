@@ -1,3 +1,23 @@
+## 🕐 Recent updates
+
+> **Last updated:** June 11, 2025
+
+### What's new
+
+- 🎮 **Gen 4 added** — Sinnoh Pokémon are now available as followers.
+- 🔄 **Smoother cycling** — Transitions between Pokémon have been improved for a more fluid experience.
+- 🐾 **Natural following behavior** — Fixed the rigid "on a leash" movement; your Pokémon now follows more organically.
+
+---
+
+### 🏆 Upcoming milestones
+
+| Installs | Reward |
+|----------|--------|
+| **75,000** | ✨ Shiny versions of all Pokémon added as a bonus |
+| **100,000** | 🌿 Gen 5 (Unova) unlocks — plus shinies for all if not yet reached |
+
+
 ## Welcome, Trainer! 👋
 
 Thanks for checking out **PokéFollower** - a browser extension that brings a little nostalgic joy to your browsing experience with cute retro 2D Pokémon sprites that follow your cursor around the web.
