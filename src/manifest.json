@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Pokemon PokéFollower Cursor",
-  "version": "3.0",
+  "version": "4.0.0",
   "description": "Pick a cute retro 2D Pokémon sprite that follows your cursor on web pages.",
   "permissions": ["storage"],
   "action": {
